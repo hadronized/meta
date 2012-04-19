@@ -1,5 +1,3 @@
-module meta.test.logger;
-
 import meta.utils.logger;
 
 int main(string[] args) {
