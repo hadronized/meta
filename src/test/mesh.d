@@ -12,16 +12,7 @@ mixin template CustomVertexDef() {
 alias vertex_def!CustomVertexDef custom_vertex;
 
 int main() {
-    /* use default vertex */
-    {
-        scope auto v = spawn!default_vertex;
-        writeln(v);
-    }
-
-    /* use custom vertex vertex */
-    {
-        scope auto v = spawn!custom_vertex;
-        writeln(v);
-    }
+    /* mesh with default vertex */
+    auto m = spawn!(mesh!default_vertex);
     return 0;
 }
