@@ -32,7 +32,6 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
     }
 
     /* This method recursively builds the vec */
-    /* TODO: add conversion with slicable object */
     private void set_(uint I, H, R...)(H head, R remaining) if (I <= D) {
         static if (is(H : T)) {
             /* we can directly set the corresponding component */
@@ -55,7 +54,7 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
 
     /* operators */
     ref vec opAssign(const ref vec rhs) {
-        //set_!0u(rhs);
+        set_!0u(rhs);
         return this;
     }
 
