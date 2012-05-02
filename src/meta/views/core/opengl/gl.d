@@ -4,6 +4,9 @@ public import derelict.opengl3.gl3;
 public import derelict.glfw3.glfw3;
 import meta.utils.logger;
 import meta.utils.runtime_error;
+public {
+    import meta.utils.color;
+}
 
 class component_not_loaded : runtime_error {
     this(string component, string reason) {
@@ -50,7 +53,7 @@ mixin template GLError() {
     }
 
     /* get error and throw exception if there's an error */
-    void fetch_error(R)(lazy string context, lazy R reason) {
+    void fetch_error(lazy string context) {
         immutable auto fullContext = typeof(this).stringof ~ '.' ~ context;
         _lastError = glGetError();
         string trmsg; /* translated message */
@@ -60,19 +63,19 @@ mixin template GLError() {
                 return;
 
             case GL_INVALID_ENUM :
-                trmsg = "invalid enum \'" ~ reason.stringof ~ '\'';
+                trmsg = "invalid enum";
                 break;
 
             case GL_INVALID_VALUE :
-                trmsg = "invalid value \'" ~ reason.stringof ~ '\'';
+                trmsg = "invalid value";
                 break;
 
             case GL_INVALID_OPERATION :
-                trmsg = "invalid operation \'" ~ reason.stringof ~ '\'';
+                trmsg = "invalid operation";
                 break;
 
             case GL_OUT_OF_MEMORY :
-                trmsg = "out of memory " ~ reason.stringof;
+                trmsg = "out of memory";
                 break;
 
             default :
@@ -83,23 +86,26 @@ mixin template GLError() {
     }
 }
 
-/* error trap class; used to avoid gl errors */
+/* error trap class; used to discard gl errors */
 private scope class error_trap {
     mixin GLError;
 
     this() {
         do {
             try {
-                fetch_error(null, null);
+                fetch_error(null);
             } catch(Error e) {}
             logger.inst().deb("avoiding gl error %d", _lastError);
         } while (_lastError != GL_NO_ERROR);
     }
 }
 
-void avoid_gl_errors() {
+
+/* avoid_gl_errors(); publicly used to discard gl errors and get a stable GL context */
+void discard_gl_errors() {
     scope auto avoider = new error_trap;
 }
+
 
 /* GLObject mixin template */
 mixin template GLObject(T) {
@@ -115,4 +121,22 @@ mixin template GLObject(T) {
     private this(T id) {
         _id = id;
     }
+}
+
+
+enum device_buffer_bit {
+    DBB_COLOR = GL_COLOR_BUFFER_BIT,
+    DBB_DEPTH = GL_DEPTH_BUFFER_BIT,        
+}
+
+/* gl device */
+class device {
+    mixin GLError;
+
+    void clear(device_buffer_bit bb) {
+        glClear(bb);
+        fetch_error("clear()");
+    }
+    
+    //void set_clear_color(
 }
