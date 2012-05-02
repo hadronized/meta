@@ -4,19 +4,13 @@ import meta.utils.logger;
 import meta.utils.memory;
 import meta.models.mesh;
 
-class custom_vertex {
-    space_co sco;
-    normal no;
-}
-
 int main() {
-    /* mesh with default vertex */
     auto m = spawn!(mesh!default_vertex);
-    alias m.vertex_t vertex_t;
 
-    space_co co, co2;
+    /* add a vertex to the mesh */
+    auto v = spawn!default_vertex;
+    v.sco = space_co(3, 1, 4);
 
-    co2 = co;
-
+    m.add_vertex(v);
     return 0;
 }

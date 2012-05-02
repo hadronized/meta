@@ -67,3 +67,8 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
         return _comp;
     }
 }
+
+/* common vecs */
+alias vec!(2, float) vec2;
+alias vec!(3, float) vec3;
+alias vec!(4, float) vec4;
