@@ -138,5 +138,7 @@ class device {
         fetch_error("clear()");
     }
     
-    //void set_clear_color(
+    void set_clear_color(ref const color c) {
+        glClearColor(c.r, c.g, c.b, c.a);
+    }
 }

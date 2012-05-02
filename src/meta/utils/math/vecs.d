@@ -19,8 +19,8 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
     T[D] _comp;
 
     mixin AddCompProperties!("x", 0u);
-    mixin AddCompProperties!("y", 1u);
-    static if (D > 2)
+    mixin AddCompProperties!("r", 0u);
+    static if (D > 2) 
         mixin AddCompProperties!("z", 2u);
     static if (D > 3)
         mixin AddCompProperties!("w", 3u);
