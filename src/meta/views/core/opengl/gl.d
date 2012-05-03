@@ -178,7 +178,7 @@ enum shader_type : GLenum {
     GEOMETRY = GL_GEOMETRY_SHADER
 }
 
-class shader_stage {
+class shader {
     mixin GLObject!GLuint;
 
     public immutable shader_type type;
@@ -234,5 +234,74 @@ class shader_stage {
     }
 }
 
+
+/* runtime error */
+class shader_program_error : runtime_error {
+    this(string reason) {
+        super("shader program error; reason: " ~ reason);
+    }
+}
+
+/* shader program */
 class shader_program {
+    mixin GLObject!GLuint;
+
+    this() {
+        _id = glCreateProgram();
+        fetch_error("this()");
+    }
+
+    ~this() {
+        glDeleteProgram(_id);
+    }
+
+    void attach(shader s) {
+        glAttachShader(_id, s.id);
+    }
+
+    void detach(shader s) {
+        glDetachShader(_id, s.id);
+    }
+
+    void link() {
+        glLinkProgram(_id);
+        fetch_error("link()");
+        check_link_();
+        debug check_validation_();
+    }
+
+    private void check_link_() {
+        GLint status;
+        glGetProgramiv(_id, GL_LINK_STATUS, &status);
+        fetch_error("check_link_()");
+        
+        if (status == GL_FALSE)
+            throw new shader_program_error("shader program failed to link; reason:\n" ~ link_log_());
+    }
+
+    private string link_log_() {
+        GLint l;
+
+        char[] log;
+        glGetProgramiv(_id, GL_INFO_LOG_LENGTH, &l);
+        fetch_error("link_log_():length");
+        if (l) {
+            log = new char[l];
+            glGetProgramInfoLog(_id, l, cast(int*)0, log.ptr);
+            fetch_error("link_log_():info");
+        }
+
+        return log.idup;
+    }
+
+    private void check_validation_() {
+        GLint valid;
+        glValidateProgram(_id);
+        fetch_error("check_validation_():validation");
+        glGetProgramiv(_id, GL_VALIDATE_STATUS, &valid);
+        fetch_error("check_validation_():status");
+        
+        if (valid == GL_FALSE)
+            throw new shader_program_error("shader program isn't valid; reason:\n" ~ link_log_());
+    }
 }
