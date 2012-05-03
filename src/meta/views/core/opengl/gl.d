@@ -147,6 +147,8 @@ class context_error : runtime_error {
 class context(int MajVer, int MinVer) {
     mixin OneInstance!context;
 
+    public device dev;
+
     this() {
         logger.inst().deb("Initializing glfw");
 
