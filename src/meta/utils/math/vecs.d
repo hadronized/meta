@@ -20,10 +20,16 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
 
     mixin AddCompProperties!("x", 0u);
     mixin AddCompProperties!("r", 0u);
-    static if (D > 2) 
+    mixin AddCompProperties!("y", 1u);
+    mixin AddCompProperties!("g", 1u);
+    static if (D > 2) {
         mixin AddCompProperties!("z", 2u);
-    static if (D > 3)
+        mixin AddCompProperties!("b", 2u);
+    }
+    static if (D > 3) {
         mixin AddCompProperties!("w", 3u);
+        mixin AddCompProperties!("a", 3u);
+    }
 
     alias D length;
 

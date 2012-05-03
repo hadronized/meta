@@ -3,7 +3,9 @@ import meta.utils.logger;
 
 int main() {
     logger.inst().info("Hello, world!");
-    
-    discard_gl_errors();
+
+    auto glcontext = new context!(3, 2);
+    glcontext.create(800, 600, false, "meta framework");
+
     return 0;
 }
