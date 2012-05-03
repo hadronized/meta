@@ -4,6 +4,7 @@ module meta.views.core.opengl.gl;
 private {
     import meta.views.core.opengl.common;
     import meta.utils.one_instance;
+    import meta.utils.memory;
 }
 public {
     import derelict.opengl3.gl3;
@@ -107,13 +108,8 @@ mixin template GLObject(T) {
 
     private T _id;
 
-    T id() const @property {
+    @property T id() const {
         return _id;
-    }
-
-    /* parametered ctor; set the OpenGL ID once and for all */
-    private this(T id) {
-        _id = id;
     }
 }
 
@@ -146,6 +142,7 @@ struct viewport {
     }
 }
 
+
 /* gl device */
 class device {
     mixin GLError;
@@ -164,4 +161,78 @@ class device {
         glViewport(v.x, v.y, v.w, v.h);
         fetch_error("set_viewport()");
     }
+}
+
+
+/* runtime error */
+class shader_compilation_error : runtime_error {
+    this(shader_type st, string reason) {
+        super(to!string(st) ~ " shader failed to compile; reason:\n" ~ reason);
+    }
+}
+        
+/* shader */
+enum shader_type : GLenum {
+    VERTEX   = GL_VERTEX_SHADER ,
+    FRAGMENT = GL_FRAGMENT_SHADER,
+    GEOMETRY = GL_GEOMETRY_SHADER
+}
+
+class shader_stage {
+    mixin GLObject!GLuint;
+
+    public immutable shader_type type;
+
+    this(shader_type st) {
+        type = st;
+        _id = glCreateShader(type);
+        fetch_error("this()");
+        assert(_id);
+    }
+
+    ~this() {
+        glDeleteShader(_id);
+    }
+
+    void compile(string src) {
+        auto ptr = src.ptr;
+
+        /* set the source */
+        glShaderSource(_id, 1, &ptr, cast(const(int)*)0);
+        fetch_error("compile():source");
+
+        /* compile the shader */
+        glCompileShader(_id);
+        fetch_error("compile():compilation");
+
+        /* check enventual error(s) */
+        check_compilation_();
+    }
+
+    private void check_compilation_() {
+        GLint status;
+        glGetShaderiv(_id, GL_COMPILE_STATUS, &status);
+        fetch_error("check_compilation()");
+
+        if (status == GL_FALSE)
+            throw new shader_compilation_error(type, compilation_log_());
+    }
+
+    private string compilation_log_() {
+        GLint l;
+
+        char[] log;
+        glGetShaderiv(_id, GL_INFO_LOG_LENGTH, &l);
+        fetch_error("compilation_log_():length");
+        if (l) {
+            log = new char[l];
+            glGetShaderInfoLog(_id, l, cast(int*)0, log.ptr);
+            fetch_error("compilation_log_():info");
+        }
+
+        return log.idup;
+    }
+}
+
+class shader_program {
 }
