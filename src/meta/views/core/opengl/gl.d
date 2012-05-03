@@ -197,16 +197,19 @@ class shader {
     void compile(string src) {
         auto ptr = src.ptr;
 
+        logger.inst().deb("pushing %s shader sources (id=%d)", to!string(type), _id);
         /* set the source */
         glShaderSource(_id, 1, &ptr, cast(const(int)*)0);
         fetch_error("compile():source");
+        logger.inst().deb("successfully pushed %s shader sources! (id=%d)", to!string(type), _id);
 
         /* compile the shader */
+        logger.inst().deb("compiling %s shader (id=%d)", to!string(type), _id);
         glCompileShader(_id);
         fetch_error("compile():compilation");
-
         /* check enventual error(s) */
         check_compilation_();
+        logger.inst().deb("successfully compiled %s shader! (id=%d)", to!string(type), _id);
     }
 
     private void check_compilation_() {
@@ -255,18 +258,32 @@ class shader_program {
         glDeleteProgram(_id);
     }
 
-    void attach(shader s) {
+    void attach(S...)(shader s, S others) {
+        logger.inst().deb("attaching %s shader (shader_id=%d, shader_program_id=%d)", to!string(s.type), s.id, _id);
         glAttachShader(_id, s.id);
+        fetch_error("attach()");
+        logger.inst().deb("successfully attached %s shader (shader_id=%d, shader_program_id=%d)", to!string(s.type), s.id, _id);
+        
+        static if (others.length)
+            attach(others);
     }
 
-    void detach(shader s) {
+    void detach(S...)(shader s, S others) {
+        logger.inst().deb("detaching %s shader (shader_id=%d, shader_program_id=%d)", to!string(s.type), s.id, _id);
         glDetachShader(_id, s.id);
+        fetch_error("detach()");
+        logger.inst().deb("successfully detached %s shader (shader_id=%d, shader_program_id=%d)", to!string(s.type), s.id, _id);
+
+        static if (others.length)
+            detach(others);
     }
 
     void link() {
+        logger.inst().deb("linking shader program (id=%d)", _id);
         glLinkProgram(_id);
         fetch_error("link()");
         check_link_();
+        logger.inst().deb("successfully linked shader program (id=%d)", _id);
         debug check_validation_();
     }
 
