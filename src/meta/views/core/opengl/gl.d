@@ -2,22 +2,13 @@ module meta.views.core.opengl.gl;
 
 /* imports */
 private {
-    import meta.utils.logger;
+    import meta.views.core.opengl.common;
     import meta.utils.one_instance;
-    import meta.utils.runtime_error;
 }
 public {
     import derelict.opengl3.gl3;
-    import derelict.glfw3.glfw3;
+    import meta.views.core.opengl.glfw;
     import meta.utils.color;
-}
-
-
-/* runtime error */
-class component_not_loaded : runtime_error {
-    this(string component, string reason) {
-        super("OpenGL core failed to load the component \'" ~ component ~ "\'; reason: " ~ reason);
-    }
 }
 
 
@@ -32,15 +23,6 @@ class globject_error : runtime_error {
 /* static ctor */
 static this() {
     logger.inst().deb("Initializing gl module");
-
-    /* glfw initialization */
-    try {
-        DerelictGLFW3.load();
-    } catch (Error e) {
-        throw new component_not_loaded("glfw", e.msg);
-    }
-    if (!DerelictGLFW3.isLoaded())
-        throw new component_not_loaded("glfw", "unknown");
         
     /* gl initialization */
     try {
@@ -143,57 +125,43 @@ class context_error : runtime_error {
     }
 }
 
-/* gl context */
-class context(int MajVer, int MinVer) {
-    mixin OneInstance!context;
 
-    public device dev;
-
-    this() {
-        logger.inst().deb("Initializing glfw");
-
-        glfwInit();
-        glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, MajVer);
-        glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, MinVer);
-        glfwOpenWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-        glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-        logger.inst().deb("Successfully initialized glfw");
-    }
-
-    ~this() {
-        glfwTerminate();
-    }
-
-    public void create(int w, int h, bool full, string title) {
-        auto window = glfwOpenWindow(w, h, GLFW_WINDOWED, cast(const(char)*)title, null);
-        if (!window) {
-            glfwTerminate();
-            throw new context_error("unable to open a window");
-        }
-
-        logger.inst().deb("Created a gl context with a window {(%dx%d), fullscreen=%s}", w, h, full ? "on" : "off");
-        DerelictGL3.reload();
-        logger.inst().deb("Reloaded GL3 module");
-    }
+enum buffer_bit {
+    COLOR = GL_COLOR_BUFFER_BIT,
+    DEPTH = GL_DEPTH_BUFFER_BIT,        
 }
 
 
-enum device_buffer_bit {
-    DBB_COLOR = GL_COLOR_BUFFER_BIT,
-    DBB_DEPTH = GL_DEPTH_BUFFER_BIT,        
+struct viewport {
+    int x;
+    int y;
+    int w;
+    int h;
+
+    this (int x, int y, int w, int h) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
+    }
 }
 
 /* gl device */
 class device {
     mixin GLError;
 
-    void clear(device_buffer_bit bb) {
+    void clear(buffer_bit bb) {
         glClear(bb);
         fetch_error("clear()");
     }
     
     void set_clear_color(ref const color c) {
         glClearColor(c.r, c.g, c.b, c.a);
+        fetch_error("set_clear_color()");
+    }
+
+    void set_viewport(ref const viewport v) {
+        glViewport(v.x, v.y, v.w, v.h);
+        fetch_error("set_viewport()");
     }
 }
