@@ -83,8 +83,8 @@ class window(int MajVer, int MinVer) {
         glfwCloseWindow(_window);
     }
 
-    void fetch_events(bool wait = true) {
-        if (wait)
+    void fetch_events(bool wait = true)() {
+        static if (wait)
             glfwWaitEvents();
         else
             glfwPollEvents();
