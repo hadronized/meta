@@ -5,6 +5,7 @@ private {
     import meta.views.core.opengl.common;
     import meta.utils.one_instance;
     import meta.utils.memory;
+    import std.string : toUpper;
 }
 public {
     import derelict.opengl3.gl3;
@@ -321,4 +322,18 @@ class shader_program {
         if (valid == GL_FALSE)
             throw new shader_program_error("shader program isn't valid; reason:\n" ~ link_log_());
     }
+}
+
+
+/* gl type */
+enum gltype {
+    FLOAT = GL_FLOAT,
+    INT = GL_INT,
+    UINT = GL_UNSIGNED_INT,
+    BYTE = GL_BYTE,
+    DOUBLE = GL_DOUBLE
+}
+
+template GLTypeOf(T) if (__traits(isArithmetic, T)) {
+    mixin("alias gltype." ~ toUpper(T.stringof) ~ " GLTypeOf;");
 }

@@ -32,6 +32,7 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
     }
 
     alias D length;
+    alias T value_type;
 
     this(P...)(P params) if (params.length <= D) {
         set_!0u(params);
