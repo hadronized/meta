@@ -35,8 +35,11 @@ its objects. Actually, there's several packages in ``meta``:
 
 utils
     This package is for utils objects, such as mixins template (OneInstance, Singleton, ...), logger, math, traits, memory...
-render
-    This package is for render objects and is intented to be used when you want to render something.
+views
+    render
+        This package is for render objects and is intented to be used when you want to render something.
+    user
+        This package is for user interactivity
 wrappers
     This package encapsulates all wrappers. The most useful wrapper is for sure the OpenGL one (which is OOP, of course)
 model
