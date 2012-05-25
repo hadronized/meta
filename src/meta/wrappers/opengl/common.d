@@ -1,4 +1,4 @@
-module meta.views.core.opengl.common;
+module meta.wrappers.opengl.common;
 
 private {
 	/* TODO: import meta.wrappers.common, wrappers_not_loaded runtime_error */

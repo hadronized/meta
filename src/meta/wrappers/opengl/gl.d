@@ -1,5 +1,6 @@
 module meta.views.core.opengl.gl;
 
+version(none) {
 public {
     import derelict.opengl3.gl3;
     import meta.views.core.opengl.glfw;
@@ -30,7 +31,6 @@ class device {
 }
 
 
-
-
+}
 
 

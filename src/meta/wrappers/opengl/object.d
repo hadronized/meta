@@ -13,7 +13,7 @@ mixin template GLObject(T) {
 
     private T _id;
 
-    property T id() const @property {
+    T id() const @property {
         return _id;
     }
 }

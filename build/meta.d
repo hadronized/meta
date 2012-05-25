@@ -13,7 +13,7 @@ enum INCLUDE_DIR_STRING = "-I../src -I../src/import";
 
 int main(string[] args) {
 	if (args.length == 1)
-		usage();
+		build();
 	dispatch_args(args[1 .. $]);
 	return 0;
 }

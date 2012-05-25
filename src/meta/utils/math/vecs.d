@@ -31,6 +31,10 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
         mixin AddCompProperties!("a", 3u);
     }
 
+	T[D] as_array() const @property {
+		return _comp;
+	}
+
     alias D length;
     alias T value_type;
 
