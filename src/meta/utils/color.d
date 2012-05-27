@@ -1,5 +1,5 @@
 module meta.utils.color;
 
-import meta.utils.math.vecs;
+import meta.math.vecs;
 
 alias vec4 color;

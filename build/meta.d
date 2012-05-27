@@ -43,7 +43,7 @@ void usage() {
 }
 
 void build() {
-	writeln("Building meta...");
+    writeln("Building meta...");
 	auto files = array(dirEntries(SRC_DIR, "*.{d}", SpanMode.depth));
 
 	version (DigitalMars) {
@@ -57,7 +57,7 @@ void build() {
 		auto nameIndex = countUntil(retro(f), '/');
 		auto objectName = f[$-nameIndex .. $-2] ~ ".o";
 		if (timeLastModified(f) >= timeLastModified(objectName, SysTime.min)) {
-			writefln("--> [Compiling %s [%d%%]", f, cast(int)(i*100/filesNb));
+			writefln("--> [Compiling %s [%d%%]", f, cast(int)(((i+1)*100/filesNb)));
 			auto ret = shell(compileString(f));
 			writeln(ret);
 		}

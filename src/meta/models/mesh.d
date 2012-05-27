@@ -1,6 +1,6 @@
 module meta.models.mesh;
 
-import meta.utils.math.vecs;
+import meta.math.vecs;
 
 /**
  * @class mesh

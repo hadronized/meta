@@ -5,7 +5,7 @@ private {
     import meta.utils.traits;
 }
 public {
-    import meta.utils.math.vecs;
+    import meta.ath.vecs;
 }
 
 mixin template GLSLObject() {

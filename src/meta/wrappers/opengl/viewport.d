@@ -2,7 +2,7 @@ module meta.wrappers.opengl.viewport;
 
 private {
 	import meta.wrappers.opengl.common;
-	import meta.utils.math.vecs;
+	import meta.math.vecs;
 }
 public {
 }

@@ -4,7 +4,7 @@ version(none) {
 public {
     import derelict.opengl3.gl3;
     import meta.views.core.opengl.glfw;
-    import meta.utils.color;
+    import meta.color;
 }
 
 

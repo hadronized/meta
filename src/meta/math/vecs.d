@@ -1,4 +1,4 @@
-module meta.utils.math.vecs;
+module meta.math.vecs;
 
 import meta.utils.traits;
 
