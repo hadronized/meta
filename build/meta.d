@@ -1,10 +1,12 @@
 module meta;
 
 /* imports */
-import std.algorithm : joiner;
+import std.range : retro;
+import std.algorithm : joiner, countUntil;
 import std.array : array;
-import std.file : dirEntries, SpanMode;
+import std.file : dirEntries, SpanMode, timeLastModified;
 import std.stdio : writefln, writeln;
+import std.datetime : SysTime;
 import std.process : shell;
 
 /* source directory */
@@ -52,9 +54,14 @@ void build() {
 
 	auto filesNb = files.length;
 	foreach (int i, string f; files) {
-		writefln("--> [Compiling %s [%d%%]", f, cast(int)(i*100/filesNb));
-		auto ret = shell(compileString(f));
-		writeln(ret);
+		auto nameIndex = countUntil(retro(f), '/');
+		auto objectName = f[$-nameIndex .. $-2] ~ ".o";
+		if (timeLastModified(f) >= timeLastModified(objectName, SysTime.min)) {
+			writefln("--> [Compiling %s [%d%%]", f, cast(int)(i*100/filesNb));
+			auto ret = shell(compileString(f));
+			writeln(ret);
+		}
+
 		++i;
 	}
 	writeln("...done");
