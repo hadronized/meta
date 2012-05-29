@@ -29,3 +29,4 @@ class vao {
 		glBindVertexArray(0);
 	}
 }
+
