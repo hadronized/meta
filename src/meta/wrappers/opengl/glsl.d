@@ -1,11 +1,11 @@
 module meta.views.core.opengl.glsl;
 
 private {
-    import meta.views.core.opengl.gl;
+	import meta.wrappers.opengl.common;
     import meta.utils.traits;
 }
 public {
-    import meta.ath.vecs;
+    import meta.math.vecs;
 }
 
 mixin template GLSLObject() {
@@ -18,7 +18,7 @@ mixin template GLSLObject() {
             return _id != T.init;
         }
 
-        GLint ninit() const {
+        GLint init() const {
             return -1;
         }
     }

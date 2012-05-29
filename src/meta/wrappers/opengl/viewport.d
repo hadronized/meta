@@ -13,6 +13,9 @@ alias vec!(4, int) viewport_parameters; /* x, y, w, h */
 class viewport {
 	mixin GLError;
 
+	this() {
+	}
+
     this(int x, int y, int w, int h) {
 		glViewport(x, y, w, h);
 		fetch_error("this()");
