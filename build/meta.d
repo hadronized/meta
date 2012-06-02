@@ -45,7 +45,6 @@ void usage() {
 void build() {
     writeln("Building meta...");
 	auto files = array(dirEntries(SRC_DIR, "*.d", SpanMode.depth));
-	writeln(files);
 
 	version (DigitalMars) {
 		string compileString(string f) {
@@ -54,25 +53,16 @@ void build() {
 	}
 
 	auto filesNb = files.length;
-	writefln("There's %d files in the current meta build tree", filesNb);
-	foreach (f; files) 
-		writefln("cc %s", f);
-	for (auto i = 0u; i < filesNb; ++i)
-		writefln("ohai %d: %s", i, files[i]);
-
 	foreach (int i, string f; files) {
-		writefln("--> checking %s file", f);
 		auto nameIndex = countUntil(retro(f), '/');
 		auto objectName = f[$-nameIndex .. $-2] ~ ".o";
 		if (timeLastModified(f) >= timeLastModified(objectName, SysTime.min)) {
 			writefln("--> [Compiling %s  %d%%]", f, cast(int)(((i+1)*100/filesNb)));
 			auto ret = shell(compileString(f));
-			writeln(ret);
+			if (ret.length >= 1)
+				writeln(ret ~ '\n');
 		}
-
-		++i;
 	}
-	writeln("...done");
-	writeln();
+	writeln("...done\n");
 }
 
