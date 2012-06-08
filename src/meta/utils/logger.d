@@ -12,12 +12,12 @@ class logger {
         static if (name == "deb") {
             mixin("void " ~ name ~ "(A...)(A args) {
                 debug " ~ stream ~ ".writef(\"%s | %-7s > \", Clock.currTime(), \"" ~ name ~ "\");
-                debug writefln(args);
+                debug " ~ stream ~ ".writefln(args);
             }");
         } else {
             mixin("void " ~ name ~ "(A...)(A args) {
                 " ~ stream ~ ".writef(\"%s | %-7s > \", Clock.currTime(), \"" ~ name ~ "\");
-                writefln(args);
+                " ~ stream ~ ".writefln(args);
             }");
         }
     }
