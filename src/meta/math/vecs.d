@@ -7,16 +7,16 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
     mixin template AddCompProperties(string name, uint i) {
         mixin("
             @property T " ~ name ~ "() const {
-                return _comp[i];
+                return _[i];
             }
 
             @property T " ~ name ~ "(in T v) {
-                return _comp[i] = v;
+                return _[i] = v;
             }");
     }
 
     /* components */
-    T[D] _comp;
+    private T[D] _;
 
     mixin AddCompProperties!("x", 0u);
     mixin AddCompProperties!("r", 0u);
@@ -31,9 +31,14 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
         mixin AddCompProperties!("a", 3u);
     }
 
-	T[D] as_array() const @property {
-		return _comp;
+	inout(T)[D] as_array() inout @property {
+		return _;
 	}
+
+	inout(T) *  ptr() inout @property {
+		return _.ptr;
+	}
+
 
     alias D length;
     alias T value_type;
@@ -46,12 +51,12 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
     private void set_(uint I, H, R...)(H head, R remaining) if (I <= D) {
         static if (is(H : T)) {
             /* we can directly set the corresponding component */
-            _comp[I] = head;
+            _[I] = head;
             /* and go to the next component */
             set_!(I+1)(remaining);
         } else {
             static if (__traits(compiles, has!(vec!(D, T), "slice"))) {
-                _comp[I..I+H.length] = head[];
+                _[I..I+H.length] = head[];
                 set_!(I+H.length)(remaining);
             } else {
                 static assert (0, "cannot assign " ~ H.stringof ~ " to " ~ typeof(this).stringof);
@@ -64,18 +69,18 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
     }
 
     /* operators */
-    ref vec opAssign(const ref vec rhs) {
+    ref vec opAssign(in vec rhs) {
         set_!0u(rhs);
         return this;
     }
 
     /* make vec sliceable */
     const(T)[] opSlice(size_t x, size_t y) const {
-        return _comp[x..y];
+        return _[x..y];
     }
 
     const(T)[] opSlice() const {
-        return _comp;
+        return _;
     }
 }
 
@@ -87,7 +92,7 @@ alias vec!(4, float) vec4;
 
 
 /* trait */
-template vec_trait(uint D, T, vec : vec!(D, T)) {
+template vec_trait(V : vec!(D, T), uint D, T) {
 	alias D dimension;
 	alias T value_type;
 }

@@ -1,4 +1,4 @@
-module meta.wrappers.opengl.vao;
+module meta.wrappers.opengl.va;
 
 /* imports */
 public {
@@ -8,7 +8,7 @@ private {
 }
 
 
-class vao {
+class va {
 	mixin GLObject!uint;
 
 	this() {

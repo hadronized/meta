@@ -2,13 +2,7 @@ module meta.models.mesh;
 
 import meta.math.vecs;
 
-/**
- * @class mesh
- * @param V a vertex definition
- * @brief Mesh class
- *
- *
- */
+
 class mesh(V) {
     alias ulong vertex_id;
     alias V vertex_t;

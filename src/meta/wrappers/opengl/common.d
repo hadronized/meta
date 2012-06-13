@@ -1,7 +1,8 @@
 module meta.wrappers.opengl.common;
 
 private {
-	/* TODO: import meta.wrappers.common, wrappers_not_loaded runtime_error */
+	import std.stdio;
+	import meta.wrappers.common;
 }
 public {
 	import derelict.opengl3.gl3;
@@ -20,18 +21,11 @@ static this() {
     try {
         DerelictGL3.load();
     } catch (Error e) {
-        throw new component_not_loaded("gl", e.msg);
+        throw new wrapper_not_loaded("gl", e.msg);
     }
     if (!DerelictGL3.isLoaded())
-        throw new component_not_loaded("gl", "unknown");
+        throw new wrapper_not_loaded("gl", "unknown");
 
     logger.inst().deb("Successfully initialized gl module");
 }
 
-
-/* runtime error */
-class component_not_loaded : runtime_error {
-    this(string component, string reason) {
-        super("OpenGL core failed to load the component \'" ~ component ~ "\'; reason: " ~ reason);
-    }
-}
