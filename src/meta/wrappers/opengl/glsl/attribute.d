@@ -31,11 +31,14 @@ class attribute(T) {
         fetch_error("disable()");
     }
 
-    void map(shader_program sp) {
+    void into(shader_program sp) {
         auto ptr = name.ptr;
         GLint l = glGetAttribLocation(sp.id, name.ptr);
         fetch_error("map()");
         _id = l;
+
+		if (_id != init) 
+			logger.inst().deb("attribute \'%s\' is active for shader program (id=%d)", name, sp.id);
     }
 
     /* static if to determine if T is simple int, float, or what */

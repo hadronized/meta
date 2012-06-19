@@ -60,7 +60,7 @@ mixin template GLError() {
 
 
 /* error trap class; used to discard gl errors */
-private scope class error_trap {
+scope class error_trap {
     mixin GLError;
 
     this() {
