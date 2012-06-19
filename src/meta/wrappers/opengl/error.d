@@ -2,7 +2,7 @@ module meta.wrappers.opengl.error;
 
 /* imports */
 private {
-	import meta.wrappers.opengl.common;
+    import meta.wrappers.opengl.common;
 }
 public {
 }

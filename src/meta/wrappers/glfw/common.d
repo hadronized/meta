@@ -1,10 +1,10 @@
 module meta.wrappers.glfw.common;
 
 private {
-	import meta.wrappers.common;
+    import meta.wrappers.common;
 }
 public {
-	import derelict.glfw3.glfw3;
+    import derelict.glfw3.glfw3;
     import meta.utils.logger;
     import meta.utils.runtime_error;
 }

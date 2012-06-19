@@ -1,15 +1,15 @@
 module meta.wrappers.opengl.common;
 
 private {
-	import std.stdio;
-	import meta.wrappers.common;
+    import std.stdio;
+    import meta.wrappers.common;
 }
 public {
-	import derelict.opengl3.gl3;
+    import derelict.opengl3.gl3;
     import meta.utils.logger;
     import meta.utils.runtime_error;
-	import meta.wrappers.opengl.error;
-	import meta.wrappers.opengl.object;
+    import meta.wrappers.opengl.error;
+    import meta.wrappers.opengl.object;
 }
 
 

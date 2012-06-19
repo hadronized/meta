@@ -2,7 +2,7 @@ module meta.wrappers.opengl.glsl.object;
 
 /* imports */
 public {
-	import meta.wrappers.opengl.common;
+    import meta.wrappers.opengl.common;
 }
 private {
 }

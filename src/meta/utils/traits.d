@@ -18,6 +18,6 @@ template Compatible(T, string Q) {
                 has!(T, "slice");
             });
     } else {
-        enum Compatible = false;
+        static assert(false, Q ~ " is not a valid compatibility test!");
     }
 }

@@ -1,7 +1,7 @@
 module meta.wrappers.opengl.object;
 
 private {
-	import meta.wrappers.opengl.common;
+    import meta.wrappers.opengl.common;
 }
 public {
 }

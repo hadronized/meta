@@ -2,18 +2,18 @@ module meta.wrappers.opengl.device;
 
 /* imports */
 private {
-	import meta.wrappers.opengl.common;
+    import meta.wrappers.opengl.common;
 }
 public {
-	import meta.utils.color;
-	import meta.wrappers.opengl.viewport;
+    import meta.utils.color;
+    import meta.wrappers.opengl.viewport;
 }
 
 
 /* buffer bit */
 enum buffer_bit {
-	COLOR = GL_COLOR_BUFFER_BIT,
-	DEPTH = GL_DEPTH_BUFFER_BIT
+    COLOR = GL_COLOR_BUFFER_BIT,
+    DEPTH = GL_DEPTH_BUFFER_BIT
 }
 
 /* gl device */

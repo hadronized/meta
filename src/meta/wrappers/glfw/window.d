@@ -2,9 +2,9 @@ module meta.wrappers.glfw.window;
 
 /* imports */
 private {
-	import meta.wrappers.opengl.common;
-	import meta.wrappers.glfw.common;
-	import std.conv : to;
+    import meta.wrappers.opengl.common;
+    import meta.wrappers.glfw.common;
+    import std.conv : to;
 }
 public {
 }
@@ -12,9 +12,9 @@ public {
 
 /* window error */
 class window_error : runtime_error {
-	this(string reason) {
-		super("window error; reason: " ~ reason);
-	}
+    this(string reason) {
+        super("window error; reason: " ~ reason);
+    }
 }
 
 

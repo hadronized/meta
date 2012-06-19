@@ -1,8 +1,8 @@
 module meta.wrappers.opengl.shader_program;
 
 private {
-	import meta.wrappers.opengl.common;
-	import meta.wrappers.opengl.shader;
+    import meta.wrappers.opengl.common;
+    import meta.wrappers.opengl.shader;
 }
 public {
 }
@@ -93,12 +93,12 @@ class shader_program {
             throw new shader_program_error("shader program isn't valid; reason:\n" ~ link_log_());
     }
 
-	public void use() {
-		glUseProgram(_id);
-		fetch_error("use()");
-	}
+    public void use() {
+        glUseProgram(_id);
+        fetch_error("use()");
+    }
 
-	public void done() {
-		glUseProgram(0);
-	}
+    public void done() {
+        glUseProgram(0);
+    }
 }

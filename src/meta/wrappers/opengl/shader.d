@@ -1,8 +1,8 @@
 module meta.wrappers.opengl.shader;
 
 private {
-	import std.conv : to;
-	import meta.wrappers.opengl.common;
+    import std.conv : to;
+    import meta.wrappers.opengl.common;
 }
 public {
 }

@@ -24,74 +24,73 @@ enum LIBS = "-L-lDerelictGL3 -L-lDerelictUtil -L-lDerelictGLFW3";
 enum LIB_NAME = "libmeta.a";
 
 int main(string[] args) {
-	if (args.length == 1)
-		build(true);
-	else
-		dispatch_args(args[1 .. $]);
-	return 0;
+    if (args.length == 1)
+        build(true);
+    else
+        dispatch_args(args[1 .. $]);
+    return 0;
 }
 
 void dispatch_args(string[] args) {
-	foreach (a; args) {
-		switch (a) {
-			case "build" :
-				build(false);
-				break;
+    foreach (a; args) {
+        switch (a) {
+            case "build" :
+                build(false);
+                break;
 
-			case "clean" :
-				shell("rm -f *.o " ~ LIB_NAME);
-				break;
+            case "clean" :
+                shell("rm -f *.o " ~ LIB_NAME);
+                break;
 
-			case "link" :
-				build(true);
-				break;
+            case "link" :
+                build(true);
+                break;
 
-			default :;
-				usage();
-		}
-
-	}
+            default :;
+                usage();
+        }
+    }
 }
 
 void usage() {
-	writeln("usage: meta [build|link|clean]");
+    writeln("usage: meta [build|link|clean]");
 }
 
 void build(bool link) {
     writeln("Building meta...");
-	auto files = array(dirEntries(SRC_DIR, "*.d", SpanMode.depth));
-	string toLink;	
+    auto files = array(dirEntries(SRC_DIR, "*.d", SpanMode.depth));
+    string toLink;    
 
-	version (DigitalMars) {
-		string compileString(string f, string output) {
-			return "dmd -c " ~ BUILD_TYPE ~ " " ~ INCLUDE_DIR_STRING ~ " " ~ f ~ " -of" ~ output;
-		}
-	}
+    version (DigitalMars) {
+        string compileString(string f, string output) {
+            return "dmd -c " ~ BUILD_TYPE ~ " " ~ INCLUDE_DIR_STRING ~ " " ~ f ~ " -of" ~ output;
+        }
+    }
 
-	auto filesNb = files.length;
-	foreach (int i, string f; files) {
-		auto moduleName = tr(f[SRC_DIR.length+1 .. $], "/", ".");
-		auto objectName = moduleName[0 .. $-2] ~ ".o";
-		if (timeLastModified(f) >= timeLastModified(objectName, SysTime.min)) {
-			writefln("--> [Compiling %s  %d%%]", moduleName, cast(int)(((i+1)*100/filesNb)));
-			auto ret = shell(compileString(f, objectName));
-			if (ret.length >= 1)
-				writeln(ret ~ '\n');
-		}
+    auto filesNb = files.length;
+    foreach (int i, string f; files) {
+        auto moduleName = tr(f[SRC_DIR.length+1 .. $], "/", ".");
+        auto objectName = moduleName[0 .. $-2] ~ ".o";
+        if (timeLastModified(f) >= timeLastModified(objectName, SysTime.min)) {
+            writefln("--> [Compiling %s  %d%%]", moduleName, cast(int)(((i+1)*100/filesNb)));
+            auto ret = shell(compileString(f, objectName));
+            if (ret.length >= 1)
+                writeln(ret ~ '\n');
+        }
 
-		if (link)
-			toLink ~= ' ' ~ objectName;
-	}
-	writeln("...done\n");
+        if (link)
+            toLink ~= ' ' ~ objectName;
+    }
+    writeln("...done\n");
 
-	if (link) {
-		writeln("Linking meta...");
-		version (DigitalMars) {
-			auto linkString = "dmd -lib " ~ BUILD_TYPE ~ " " ~ toLink ~ " " ~ LIBS ~ " -of" ~ LIB_NAME;
-		}
+    if (link) {
+        writeln("Linking metaf..");
+        version (DigitalMars) {
+            auto linkString = "dmd -lib " ~ BUILD_TYPE ~ " " ~ toLink ~ " " ~ LIBS ~ " -of" ~ LIB_NAME;
+        }
 
-		auto ret = shell(linkString);
-		writeln(ret);
-		writeln("...done\n");
-	}
+        auto ret = shell(linkString);
+        writeln(ret);
+        writeln("...done\n");
+    }
 }

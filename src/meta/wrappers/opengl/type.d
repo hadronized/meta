@@ -2,7 +2,7 @@ module meta.wrappers.opengl.type;
 
 private {
     import std.string : toUpper;
-	import meta.wrappers.opengl.common;
+    import meta.wrappers.opengl.common;
 }
 public {
 }

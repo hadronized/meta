@@ -31,13 +31,13 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
         mixin AddCompProperties!("a", 3u);
     }
 
-	inout(T)[D] as_array() inout @property {
-		return _;
-	}
+    inout(T)[D] as_array() inout @property {
+        return _;
+    }
 
-	inout(T) *  ptr() inout @property {
-		return _.ptr;
-	}
+    inout(T) *  ptr() inout @property {
+        return _.ptr;
+    }
 
 
     alias D length;
@@ -93,7 +93,7 @@ alias vec!(4, float) vec4;
 
 /* trait */
 template vec_trait(V : vec!(D, T), uint D, T) {
-	alias D dimension;
-	alias T value_type;
+    alias D dimension;
+    alias T value_type;
 }
 
