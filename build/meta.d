@@ -54,7 +54,7 @@ void dispatch_args(string[] args) {
 }
 
 void usage() {
-	writeln("usage: meta [build|clean]");
+	writeln("usage: meta [build|link|clean]");
 }
 
 void build(bool link) {
