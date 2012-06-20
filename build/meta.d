@@ -84,7 +84,7 @@ void build(bool link) {
     writeln("...done\n");
 
     if (link) {
-        writeln("Linking meta..");
+        writeln("Linking meta...");
         version (DigitalMars) {
             auto linkString = "dmd -lib " ~ BUILD_TYPE ~ " " ~ toLink ~ " " ~ LIBS ~ " -of" ~ LIB_NAME;
         }
