@@ -1,6 +1,13 @@
 module meta.math.vecs;
 
-import meta.utils.traits;
+/* imports */
+private {
+	import std.algorithm : reduce;
+	import std.math : sqrt;
+	import meta.utils.traits;
+} public {
+}
+
 
 /* TODO: add common and useful math op */
 struct vec(uint D, T) if (D >= 2 && D <= 4) {
@@ -35,7 +42,7 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
         return _;
     }
 
-    inout(T) *  ptr() inout @property {
+    inout(T) * ptr() inout @property {
         return _.ptr;
     }
 
@@ -82,6 +89,12 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
     const(T)[] opSlice() const {
         return _;
     }
+
+	static if (__traits(isArithmetic, T)) {
+		float norm() const @property {
+			return sqrt(reduce!("a + b*b")(0.0f, _));
+		}
+	}
 }
 
 

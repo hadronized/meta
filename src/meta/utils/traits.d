@@ -13,8 +13,6 @@ void has(T, string trait)() if (trait == "slice") {
 template Compatible(T, string Q) {
     static if (Q == "array") {
         enum Compatible = __traits(compiles, () => {
-                T foo;
-                auto l = foo.length;
                 has!(T, "slice");
             });
     } else {
