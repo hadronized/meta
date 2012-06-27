@@ -62,7 +62,7 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
             /* and go to the next component */
             set_!(I+1)(remaining);
         } else {
-            static if (__traits(compiles, has!(vec!(D, T), "slice"))) {
+            static if (__traits(compiles, has!(vec!(D, T), "slice"))) { /* TODO: I think we have to test if H has slice, not vec, which obviously has it */
                 _[I..I+H.length] = head[];
                 set_!(I+H.length)(remaining);
             } else {
@@ -93,6 +93,14 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
 	static if (__traits(isArithmetic, T)) {
 		float norm() const @property {
 			return sqrt(reduce!("a + b*b")(0.0f, _));
+		}
+
+		void normalize() {
+			auto n = norm;
+			assert ( n ); /* TODO: float precision-lost issue */
+
+			foreach (ref v; _)
+				v /= n;
 		}
 	}
 }

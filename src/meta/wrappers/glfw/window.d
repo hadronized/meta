@@ -42,7 +42,7 @@ class window {
         glfwCloseWindow(_window);
     }
 
-    void fetch_events(bool wait = true)() {
+    void fetch_events(bool wait = false)() {
         static if (wait)
             glfwWaitEvents();
         else
