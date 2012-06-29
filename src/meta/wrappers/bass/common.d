@@ -23,3 +23,8 @@ static this() {
 
     logger.inst().deb("Successfully initialized BASS module");
 }
+
+static ~this() {
+    BASS_Free();
+    DerelictBASS.unload();
+}
