@@ -15,10 +15,10 @@ enum BUILD_TYPE = "-debug -g";
 
 /* source directory */
 enum SRC_DIR = "../src/meta";
-enum INCLUDE_DIR_STRING = "-I../src -I../src/import";
+enum INCLUDE_DIR_STRING = "-I../src -I../lib/Derelict3/import";
 
 /* lib dependencies */
-enum LIBS = "-L-lDerelictGL3 -L-lDerelictUtil -L-lDerelictGLFW3";
+enum LIBS = "-L-L../lib/Derelict3/lib -L-lDerelictGL3 -L-lDerelictUtil -L-lDerelictGLFW3";
 
 /* output */
 enum LIB_NAME = "libmeta.a";

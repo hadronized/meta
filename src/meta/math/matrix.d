@@ -33,7 +33,7 @@ mat make_perspective(float fovy, float ratio, float znear, float zfar) in {
     return mat([
 			[ itanfovyr,     0.0f,  0.0f,    0.0f ],
             [      0.0f, itanfovy,  0.0f,    0.0f ],
-            [      0.0f,     0.0f,   inf,     -1f ], 
+            [      0.0f,     0.0f,   inf,   -1.0f ], 
             [      0.0f,     0.0f, nfinf,    0.0f ]
     ]);
 }

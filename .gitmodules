@@ -1,0 +1,3 @@
+[submodule "lib/Derelict3"]
+	path = lib/Derelict3
+	url = git@github.com:skypers/Derelict3.git
