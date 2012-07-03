@@ -25,34 +25,28 @@ class sample_error : runtime_error {
 
 class sample {
     private HSAMPLE _sHnd;
+    public immutable HCHANNEL chan;
 
     this(string file) {
         _sHnd = BASS_SampleLoad(false, cast(void*)toStringz(file), 0, 0, 1, 0);
         if (!_sHnd)
             throw new sample_loading_error("unable to provide further information, please add a correct error code checker! ><> \\_o<");
+        chan = BASS_SampleGetChannel(_sHnd, false);
+        if (!chan)
+            throw new sample_error("unable to retreive the channel of a sample");
     }
 
     HSAMPLE handle() const @property {
         return _sHnd;
     }
 
-    HCHANNEL channel() const @property {
-        auto chan = BASS_SampleGetChannel(_sHnd, false); 
-        if (!chan)
-            throw new sample_error("unable to retreive the channel of a sample");
-        return chan;
-    }
-
-
     void play() {
-        auto played = BASS_ChannelPlay(channel, true);
+        auto played = BASS_ChannelPlay(chan, true);
         if (!played)
             throw new sample_error("unable to play a sample");
     }
 
     double cursor() const @property {
-        auto chan = channel;
-
         /* first, get the cursor position */
         auto bcurs = BASS_ChannelGetPosition(chan, BASS_POS_BYTE);
         if (bcurs == -1)
