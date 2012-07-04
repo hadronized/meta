@@ -55,10 +55,21 @@ class sample {
         /* then, translate it into seconds */
         auto s = BASS_ChannelBytes2Seconds(chan, bcurs);
         if (s < 0)
-            throw new sample_error("unable to translate cursor position");
+            throw new sample_error("unable to translate cursor position (bytes -> seconds)");
 
         return s;
     }
 
+    void cursor(double s) @property {
+        /* first, translate the time (seconds) into bytes */
+        auto b = BASS_ChannelSeconds2Bytes(chan, s);
+        if (b == -1)
+            throw new sample_error("unable to translate cursor position (seconds -> bytes)");
+
+        /* then, set the cursor position */
+        auto set = BASS_ChannelSetPosition(chan, b, BASS_POS_BYTE);
+        if (!set)
+            throw new sample_error("unable to set the cursor position");
+    }
 }
 
