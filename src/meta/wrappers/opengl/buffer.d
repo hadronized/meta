@@ -44,10 +44,6 @@ class buffer {
     ~this() {
         glDeleteBuffers(1, &_id);
     }
-
-    bound_buffer bind(buffer_type t) {
-        return new bound_buffer(this, t);
-    }
 }
 
 scope class bound_buffer {
