@@ -35,48 +35,44 @@ enum buffer_access {
 class buffer {
     mixin GLObject!uint;
 
-    private int _type;
-    private uint _size;
-
     this() {
         glGenBuffers(1, &_id);
         assert ( _id );
         fetch_error("this()");
-        _type = buffer_type.NONE;
-        _size = 0;
     }
 
     ~this() {
         glDeleteBuffers(1, &_id);
     }
 
-    uint size() const @property {
-        return _size;
+    bound_buffer bind(buffer_type t) {
+        return new bound_buffer(this, t);
+    }
+}
+
+scope class bound_buffer {
+    mixin GLError;
+
+    immutable buffer_type _type;
+
+    this(const buffer b, buffer_type t) {
+        glBindBuffer(t, b.id);
+        fetch_error("bind()");
+        _type = t;
     }
 
-    void use(buffer_type type) {
-        glBindBuffer(_type = type, _id);
-        fetch_error("use()");
-    }
-
-    void done() {
+    ~this() {
         glBindBuffer(_type, 0);
-        _type = buffer_type.NONE;
     }
 
     void commit(uint size, void *data, buffer_usage usage) {
-        try {
-            glBufferData(_type, _size = size, data, usage);
-            fetch_error("commit()");
-        } catch (globject_error e) {
-            _size = 0;
-            throw e;
-        }
+        glBufferData(_type, size, data, usage);
+        fetch_error("commit()");
     }
 
     void update(int offset, uint size, void *data) {
         glBufferSubData(_type, offset, size, data);
-        fetch_error("update");
+        fetch_error("update()");
     }
 
     void * map(buffer_access a) {
@@ -97,4 +93,3 @@ class buffer {
         return r == GL_TRUE;
     }
 }
-
