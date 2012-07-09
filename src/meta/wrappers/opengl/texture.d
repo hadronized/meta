@@ -111,7 +111,6 @@ scope class texture_binder {
     }
 
     void bind(texture t, texture_type target) {
-        bind_(null, target);
         bind_(t, target);
     }
 
