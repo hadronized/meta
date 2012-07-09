@@ -33,7 +33,6 @@ class run_logic : composite_logic {
         _run = true;
         logger.inst().deb("running the application");
         while (_run) {
-            /* TODO: eventually manage FPS here */
             super.run();
 
             _window.swap_buffers();

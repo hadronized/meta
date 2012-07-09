@@ -9,7 +9,7 @@ public {
 
 
 /* gl type */
-enum gltype {
+enum gltype : typeof(GL_FLOAT) {
     FLOAT = GL_FLOAT,
     INT = GL_INT,
     UINT = GL_UNSIGNED_INT,
