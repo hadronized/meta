@@ -80,42 +80,42 @@ class texture {
 }
 
 class bind_error : runtime_error {
-	this(string reason) {
-		super("unable to bind a texture; reason: " ~ reason);
-	}
+    this(string reason) {
+        super("unable to bind a texture; reason: " ~ reason);
+    }
 }
 
 scope class texture_binder {
-	mixin GLError;
+    mixin GLError;
 
-	private texture_type _target;
+    private texture_type _target;
 
-	this(texture t, texture_type target) {
-		bind_(t, target);
-	}
+    this(texture t, texture_type target) {
+        bind_(t, target);
+    }
 
-	~this() {
-		bind_(null, _target);
-	}
+    ~this() {
+        bind_(null, _target);
+    }
 
-	private void bind_(texture t, texture_type target) {
-		if (t is null) {
-			if (target != _target)
-				throw new bind_error("incompatible targets");
-			glBindTexture(_target, 0);
-		} else {
-			glBindTexture(target, t.id);
-			fetch_error("bind()");
-			_target = target;
-		}
-	}
+    private void bind_(texture t, texture_type target) {
+        if (t is null) {
+            if (target != _target)
+                throw new bind_error("incompatible targets");
+            glBindTexture(_target, 0);
+        } else {
+            glBindTexture(target, t.id);
+            fetch_error("bind()");
+            _target = target;
+        }
+    }
 
-	void bind(texture t, texture_type target) {
-		bind_(null, target);
-		bind_(t, target);
-	}
+    void bind(texture t, texture_type target) {
+        bind_(null, target);
+        bind_(t, target);
+    }
 
-	void texels(int level, texture_internal_format internal, uint w, uint h, int border, texture_format format, gltype type, void *data) {
+    void texels(int level, texture_internal_format internal, uint w, uint h, int border, texture_format format, gltype type, void *data) {
         glTexImage2D(_target, level, internal, w, h, border, format, type, data);
         fetch_error("texels()");
     }
