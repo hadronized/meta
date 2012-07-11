@@ -25,3 +25,8 @@ static this() {
     logger.inst().deb("Successfully initialized " ~ WRAPPER_NAME ~ " module");
 }
 
+static ~this() {
+	ilShutDown();
+}
+
+
