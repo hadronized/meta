@@ -21,6 +21,7 @@ static this() {
     if (!DerelictIL.isLoaded())
         throw new wrapper_not_loaded(WRAPPER_NAME, "unknown");
 
+    ilInit();
     logger.inst().deb("Successfully initialized " ~ WRAPPER_NAME ~ " module");
 }
 
