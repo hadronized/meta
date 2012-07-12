@@ -47,7 +47,7 @@ class image {
     }
 
     ~this() {
-        ilDeleteImages(1, &_);
+        //ilDeleteImages(1, &_); /* TODO: uncommenting that line produces a segfault by the D GC */
     }
 
     void bind() {
