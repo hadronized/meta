@@ -25,6 +25,9 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
     /* components */
     private T[D] _;
 
+	/* make vec usable such as array */
+	alias _ this;
+
     mixin AddCompProperties!("x", 0u);
     mixin AddCompProperties!("r", 0u);
     mixin AddCompProperties!("y", 1u);
@@ -102,6 +105,15 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
 			foreach (ref v; _)
 				v /= n;
 		}
+
+		/* TODO: we can optimize this method */
+		vec opBinary(string op)(in vec rhs) const if (op == "-" || op == "+") {
+			vec r;
+			foreach (i; 0..D)
+				mixin("r[i] = _[i]" ~ op ~ "rhs[i];");
+			return r;
+		}
+
 	}
 }
 

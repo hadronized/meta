@@ -7,7 +7,7 @@ class mesh(V) {
     alias ulong vertex_id;
     alias V vertex_t;
 
-    private vertex_t[] _vertices;
+    protected vertex_t[] _vertices;
 
     @property const(vertex_t)[] vertices() const {
         return _vertices;
