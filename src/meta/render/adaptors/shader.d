@@ -1,4 +1,4 @@
-module meta.views.render.adaptors.shader;
+module meta.render.adaptors.shader;
 
 
 interface shader {

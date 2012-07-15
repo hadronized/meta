@@ -47,9 +47,9 @@ void dispatch_args(string[] args) {
                 build(SRC_DIR, true, false);
                 break;
 
-			case "test" :
-				build(TEST_DIR, false, true);
-				break;
+            case "test" :
+                build(TEST_DIR, false, true);
+                break;
 
             default :;
                 usage();
@@ -62,7 +62,7 @@ void usage() {
 }
 
 void build(string path, bool link, bool test) {
-	bool doTest = test & !link;
+    bool doTest = test & !link;
     writefln("Building %s...", path);
     auto files = array(dirEntries(path, "*.d", SpanMode.depth));
     string toLink;    
@@ -74,11 +74,12 @@ void build(string path, bool link, bool test) {
     }
 
     auto filesNb = files.length;
+    writefln("%d files to compile", filesNb);
     foreach (int i, string f; files) {
-        auto moduleName = tr(f[path.length+1 .. $], "/", ".");
+        auto moduleName = (doTest ? "test." : "meta.") ~ tr(f[path.length+1 .. $], "/", ".");
         auto objectName = moduleName[0 .. $-2] ~ ".o";
         if (timeLastModified(f) >= timeLastModified(objectName, SysTime.min)) {
-            writefln("--> [Compiling %s  %d%%]", moduleName, cast(int)(((i+1)*100/filesNb)));
+            writefln("--> [%4d%% | Compiling %s ]", cast(int)(((i+1)*100/filesNb)), moduleName);
             auto ret = shell(compileString(f, objectName));
             if (ret.length >= 1)
                 writeln(ret ~ '\n');
