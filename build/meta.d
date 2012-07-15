@@ -26,7 +26,7 @@ enum LIB_NAME = "libmeta.a";
 
 int main(string[] args) {
     if (args.length == 1)
-        build(SRC_DIR, true);
+        build(SRC_DIR, true, false);
     else
         dispatch_args(args[1 .. $]);
     return 0;
@@ -36,7 +36,7 @@ void dispatch_args(string[] args) {
     foreach (a; args) {
         switch (a) {
             case "build" :
-                build(SRC_DIR, false);
+                build(SRC_DIR, false, false);
                 break;
 
             case "clean" :
@@ -44,11 +44,11 @@ void dispatch_args(string[] args) {
                 break;
 
             case "link" :
-                build(SRC_DIR, true);
+                build(SRC_DIR, true, false);
                 break;
 
 			case "test" :
-				build(TEST_DIR, false);
+				build(TEST_DIR, false, true);
 				break;
 
             default :;
@@ -61,14 +61,15 @@ void usage() {
     writeln("usage: meta [build|link|test|clean]");
 }
 
-void build(string path, bool link) {
+void build(string path, bool link, bool test) {
+	bool doTest = test & !link;
     writefln("Building %s...", path);
     auto files = array(dirEntries(path, "*.d", SpanMode.depth));
     string toLink;    
 
     version (DigitalMars) {
         string compileString(string f, string output) {
-            return "dmd -c " ~ BUILD_TYPE ~ " " ~ INCLUDE_DIR_STRING ~ " " ~ f ~ " -of" ~ output;
+            return (doTest ? "rdmd " : "dmd -c ") ~ BUILD_TYPE ~ " " ~ INCLUDE_DIR_STRING ~ " " ~ f ~ (doTest ? "" : " -of" ~ output);
         }
     }
 
