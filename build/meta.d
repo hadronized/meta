@@ -15,6 +15,7 @@ enum BUILD_TYPE = "-debug -g";
 
 /* source directory */
 enum SRC_DIR = "../src/meta";
+enum TEST_DIR = "../src/test";
 enum INCLUDE_DIR_STRING = "-I../src -I../lib/Derelict3/import";
 
 /* lib dependencies */
@@ -25,7 +26,7 @@ enum LIB_NAME = "libmeta.a";
 
 int main(string[] args) {
     if (args.length == 1)
-        build(true);
+        build(SRC_DIR, true);
     else
         dispatch_args(args[1 .. $]);
     return 0;
@@ -35,7 +36,7 @@ void dispatch_args(string[] args) {
     foreach (a; args) {
         switch (a) {
             case "build" :
-                build(false);
+                build(SRC_DIR, false);
                 break;
 
             case "clean" :
@@ -43,8 +44,12 @@ void dispatch_args(string[] args) {
                 break;
 
             case "link" :
-                build(true);
+                build(SRC_DIR, true);
                 break;
+
+			case "test" :
+				build(TEST_DIR, false);
+				break;
 
             default :;
                 usage();
@@ -53,12 +58,12 @@ void dispatch_args(string[] args) {
 }
 
 void usage() {
-    writeln("usage: meta [build|link|clean]");
+    writeln("usage: meta [build|link|test|clean]");
 }
 
-void build(bool link) {
-    writeln("Building meta...");
-    auto files = array(dirEntries(SRC_DIR, "*.d", SpanMode.depth));
+void build(string path, bool link) {
+    writefln("Building %s...", path);
+    auto files = array(dirEntries(path, "*.d", SpanMode.depth));
     string toLink;    
 
     version (DigitalMars) {
@@ -69,7 +74,7 @@ void build(bool link) {
 
     auto filesNb = files.length;
     foreach (int i, string f; files) {
-        auto moduleName = tr(f[SRC_DIR.length+1 .. $], "/", ".");
+        auto moduleName = tr(f[path.length+1 .. $], "/", ".");
         auto objectName = moduleName[0 .. $-2] ~ ".o";
         if (timeLastModified(f) >= timeLastModified(objectName, SysTime.min)) {
             writefln("--> [Compiling %s  %d%%]", moduleName, cast(int)(((i+1)*100/filesNb)));
@@ -90,7 +95,7 @@ void build(bool link) {
         }
 
         auto ret = shell(linkString);
-        writeln(ret);
+        writeln(ret ~ '\n');
         writeln("...done\n");
     }
 }
