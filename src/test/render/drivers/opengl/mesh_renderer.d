@@ -10,6 +10,6 @@ int main() {
     auto m = new our_mesh;
     auto renderer = new mesh_renderer_gl(m);
 
-    logger.inst().deb("Hello there!");
+    logger.inst().info("Hello there!");
     return 0;
 }

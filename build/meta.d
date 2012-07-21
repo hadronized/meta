@@ -65,7 +65,7 @@ void build(string path, bool link, bool test) {
     bool doTest = test & !link;
     writefln("Building %s...", path);
     auto files = array(dirEntries(path, "*.d", SpanMode.depth));
-    string toLink;    
+    string toLink;
 
     version (DigitalMars) {
         string compileString(string f, string output) {
