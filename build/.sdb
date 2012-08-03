@@ -1,0 +1,8 @@
+BUILD debug
+TARGET static
+IMPORT_DIR ../src ../lib/Derelict3/import
+LIB_DIR ../lib/Derelict3/lib
+LIB DerelictGL3 DerelictGLFW3 DerelictIL DerelictUtil 
+SRC_DIR ../src/meta
+TEST_DIR ../src/test
+OUT_NAME libmeta.a
