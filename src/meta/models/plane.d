@@ -25,7 +25,9 @@ struct sco2_uv1_vertex {
 alias mesh!sco2_uv1_vertex plane_mesh;
 
 /* define the plane */
-class plane : plane_mesh {
+class plane {
+	private plane_mesh _;
+
     this(float w, float h) {
         immutable w_2 = w / 2;
         immutable h_2 = h / 2;
@@ -44,18 +46,18 @@ class plane : plane_mesh {
         ];
 
         foreach (i; 0..4)
-            add_vertex( vertex_t(sco[i], uv[i]) );
+            _.add_vertex( _.vertex_t(sco[i], uv[i]) );
 	}
 
 	@property {
 		float width() const {
-			vec2 v1, v2;
-			auto v3 = v1 - v2;
-			return (_vertices[0u].sco - _vertices[3u].sco).norm;
+			auto vert = _.vertices;
+			return (vert[0u].sco - vert[3u].sco).norm;
 		}
 
 		float height() const {
-			return (_vertices[0u].sco - _vertices[1u].sco).norm;
+			auto vert = _.vertices;
+			return (vert[0u].sco - vert[1u].sco).norm;
 		}
 	}
 }

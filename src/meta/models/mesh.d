@@ -1,6 +1,12 @@
 module meta.models.mesh;
 
-import meta.math.vecs;
+/* imports */
+private {
+	import meta.math.vecs;
+	import meta.utils.fields;
+}
+public {
+}
 
 
 class mesh(V) {
@@ -20,12 +26,19 @@ class mesh(V) {
     }
 }
 
+struct vertex(VD...) {
+	alias VD definition_list;
+	mixin Fields!(VD);
+}
 
 alias vec3 space_co;
 alias vec3 normal;
 alias vec2 uv_co;
 
-/* default vertex */
-class default_vertex {
-    space_co sco;
+
+unittest {
+	alias vertex!(vec3, "sco") vert;
+
+	auto v = vert();
+	v.sco = vec3(1, 2, 3);
 }
