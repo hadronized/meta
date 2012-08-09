@@ -46,20 +46,29 @@ class buffer {
     }
 }
 
-scope class bound_buffer {
+struct buffer_binder {
     mixin GLError;
 
-    immutable buffer_type _type;
+    private buffer_type _type;
 
-    this(const buffer b, buffer_type t) {
-        glBindBuffer(t, b.id);
-        fetch_error("bind()");
+    this(const buffer b, buffer_type t) in {
+		assert ( b !is null );
+	} body {
         _type = t;
+		bind(b);
     }
 
     ~this() {
         glBindBuffer(_type, 0);
     }
+
+	void bind(const buffer b) in {
+		assert ( b !is null );
+	} body {
+		glBindBuffer(_type, 0);
+		glBindBuffer(_type, b.id);
+		fetch_error("bind()");
+	}
 
     void commit(uint size, void *data, buffer_usage usage) {
         glBufferData(_type, size, data, usage);
