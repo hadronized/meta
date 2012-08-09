@@ -42,7 +42,7 @@ class attribute(T) {
     }
 
     /* static if to determine if T is simple int, float, or what */
-    static if (    is(T == float) || is(T == int) || is(T == uint) || is(T == double) ) {
+    static if ( is(T == float) || is(T == int) || is(T == uint) || is(T == double) ) {
         mixin("
             void pointer(" ~ T.stringof ~ " *p, uint stride, bool normalized) {
                 glVertexAttribPointer(_id, 1, " ~ GLTypeOf!T ~ ", normalized, stride, p);
