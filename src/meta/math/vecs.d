@@ -2,9 +2,9 @@ module meta.math.vecs;
 
 /* imports */
 private {
-	import std.algorithm : reduce;
-	import std.math : sqrt;
-	import meta.utils.traits;
+    import std.algorithm : reduce;
+    import std.math : sqrt;
+    import meta.utils.traits;
 } public {
 }
 
@@ -25,8 +25,8 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
     /* components */
     private T[D] _;
 
-	/* make vec usable such as array */
-	alias _ this;
+    /* make vec usable such as array */
+    alias _ this;
 
     mixin AddCompProperties!("x", 0u);
     mixin AddCompProperties!("r", 0u);
@@ -65,7 +65,7 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
             /* and go to the next component */
             set_!(I+1)(remaining);
         } else {
-            static if (__traits(compiles, has!(vec!(D, T), "slice"))) { /* TODO: I think we have to test if H has slice, not vec, which obviously has it */
+            static if (Has!(H, "slice")) { /* TODO: I think we have to test if H has slice, not vec, which obviously has it */
                 _[I..I+H.length] = head[];
                 set_!(I+H.length)(remaining);
             } else {
@@ -93,28 +93,28 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
         return _;
     }
 
-	static if (__traits(isArithmetic, T)) {
-		float norm() const @property {
-			return sqrt(reduce!("a + b*b")(0.0f, _));
-		}
+    static if (__traits(isArithmetic, T)) {
+        float norm() const @property {
+            return sqrt(reduce!("a + b*b")(0.0f, _));
+        }
 
-		void normalize() {
-			auto n = norm;
-			assert ( n ); /* TODO: float precision-lost issue */
+        void normalize() {
+            auto n = norm;
+            assert ( n ); /* TODO: float precision-lost issue */
 
-			foreach (ref v; _)
-				v /= n;
-		}
+            foreach (ref v; _)
+                v /= n;
+        }
 
-		/* TODO: we can optimize this method */
-		vec opBinary(string op)(in vec rhs) const if (op == "-" || op == "+") {
-			vec r;
-			foreach (i; 0..D)
-				mixin("r[i] = _[i]" ~ op ~ "rhs[i];");
-			return r;
-		}
+        /* TODO: we can optimize this method */
+        vec opBinary(string op)(in vec rhs) const if (op == "-" || op == "+") {
+            vec r;
+            foreach (i; 0..D)
+                mixin("r[i] = _[i]" ~ op ~ "rhs[i];");
+            return r;
+        }
 
-	}
+    }
 }
 
 
