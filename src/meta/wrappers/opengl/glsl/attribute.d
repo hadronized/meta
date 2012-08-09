@@ -52,7 +52,7 @@ class attribute(T) {
     }
 
     /* static if to determine if T is vec */
-    static if (Compatible!(T, "array")) {
+    static if (Like!(T, "array")) {
         alias vec_trait!(T).dimension dimension;
         alias vec_trait!T.value_type value_type;
 
