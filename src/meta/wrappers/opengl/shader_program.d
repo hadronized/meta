@@ -55,7 +55,10 @@ class shader_program {
         fetch_error("link()");
         check_link_();
         logger.inst().deb("successfully linked shader program (id=%d)", _id);
-        debug check_validation_();
+        version ( OSX ) {
+        } else {
+            debug check_validation_();
+        }
     }
 
     private void check_link_() {
