@@ -2,8 +2,8 @@ module meta.models.mesh;
 
 /* imports */
 private {
-	import meta.math.vecs;
-	import meta.utils.fields;
+    import meta.math.vecs;
+    import meta.utils.fields;
 }
 public {
 }
@@ -27,8 +27,8 @@ class mesh(V) {
 }
 
 struct vertex(VD...) {
-	alias VD definition_list;
-	mixin Fields!(VD);
+    alias VD definition_list;
+    mixin Fields!(VD);
 }
 
 alias vec3 space_co;
@@ -37,8 +37,8 @@ alias vec2 uv_co;
 
 
 unittest {
-	alias vertex!(vec3, "sco") vert;
+    alias vertex!(vec3, "sco") vert;
 
-	auto v = vert();
-	v.sco = vec3(1, 2, 3);
+    auto v = vert();
+    v.sco = vec3(1, 2, 3);
 }

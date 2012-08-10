@@ -1,8 +1,8 @@
 module meta.models.plane;
 
 private {
-	import meta.models.mesh;
-	import meta.math.vecs;
+    import meta.models.mesh;
+    import meta.math.vecs;
 }
 public {
 }
@@ -15,10 +15,10 @@ struct sco2_uv1_vertex {
     space_co2 sco;
     uv_co uv;
 
-	this(space_co2 sco, uv_co uv) {
-		this.sco = sco;
-		this.uv = uv;
-	}
+    this(space_co2 sco, uv_co uv) {
+        this.sco = sco;
+        this.uv = uv;
+    }
 }
 
 /* define the mesh used as plane */
@@ -26,7 +26,7 @@ alias mesh!sco2_uv1_vertex plane_mesh;
 
 /* define the plane */
 class plane {
-	private plane_mesh _;
+    private plane_mesh _;
 
     this(float w, float h) {
         immutable w_2 = w / 2;
@@ -47,17 +47,21 @@ class plane {
 
         foreach (i; 0..4)
             _.add_vertex( _.vertex_t(sco[i], uv[i]) );
-	}
+    }
 
-	@property {
-		float width() const {
-			auto vert = _.vertices;
-			return (vert[0u].sco - vert[3u].sco).norm;
-		}
+    @property {
+        float width() const {
+            auto vert = _.vertices;
+            return (vert[0u].sco - vert[3u].sco).norm;
+        }
 
-		float height() const {
-			auto vert = _.vertices;
-			return (vert[0u].sco - vert[1u].sco).norm;
-		}
-	}
+        float height() const {
+            auto vert = _.vertices;
+            return (vert[0u].sco - vert[1u].sco).norm;
+        }
+
+        auto vertices() {
+            return _.vertices;
+        }
+    }
 }
