@@ -52,23 +52,23 @@ struct buffer_binder {
     private buffer_type _type;
 
     this(const buffer b, buffer_type t) in {
-		assert ( b !is null );
-	} body {
+        assert ( b !is null );
+    } body {
         _type = t;
-		bind(b);
+        bind(b);
     }
 
     ~this() {
         glBindBuffer(_type, 0);
     }
 
-	void bind(const buffer b) in {
-		assert ( b !is null );
-	} body {
-		glBindBuffer(_type, 0);
-		glBindBuffer(_type, b.id);
-		fetch_error("bind()");
-	}
+    void bind(const buffer b) in {
+        assert ( b !is null );
+    } body {
+        glBindBuffer(_type, 0);
+        glBindBuffer(_type, b.id);
+        fetch_error("bind()");
+    }
 
     void commit(uint size, void *data, buffer_usage usage) {
         glBufferData(_type, size, data, usage);
