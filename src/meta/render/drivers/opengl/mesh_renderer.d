@@ -19,8 +19,13 @@ mixin template ArrayFields(F...) {
     }   
 }
 
-struct mesh_deintarlacer(VD...) {
-    mixin ArrayFields!(VD);
+struct mesh_deintarlacer(V) {
+    mixin ArrayFields!(V.fields_list);
+
+    this(mesh!V m) in {
+        assert ( m !is null );
+    } body {
+    }
 }
 
 class mesh_renderer_gl : mesh_renderer {
@@ -31,7 +36,7 @@ class mesh_renderer_gl : mesh_renderer {
     this(V)(mesh!V m) in {
         assert ( m !is null );
     } body {
-        auto deint = new mesh_deinterlacer!V.definition_list;
+        auto deint = new mesh_deinterlacer!V.fields_list;
         auto vert = m.vertices;
 
         _vbo = new buffer;

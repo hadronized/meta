@@ -6,5 +6,7 @@ mixin template Fields(F...) {
 
         mixin("F[0] " ~ F[1] ~ ";");
         mixin Fields!(F[2 .. F.length]);
+
+        alias F fields_list;
     }   
 }
