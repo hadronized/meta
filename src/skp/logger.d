@@ -1,14 +1,14 @@
-module meta.utils.logger;
+module skp.logger;
 
 import std.stdio;
 import std.datetime;
-import meta.utils.singleton;
+import skp.singleton;
 
-class logger {
-    mixin Singleton!logger;
+class CLogger {
+    mixin MTSingleton!CLogger;
 
     /* TODO: problem with the first %s that sometimes over fails depending on what Clock.currTime() returns. */
-    mixin template AddLogMethod(string name, string stream) {
+    mixin template MTAddLogMethod(string name, string stream) {
         static if (name == "deb") {
             mixin("void " ~ name ~ "(A...)(A args) {
                 debug " ~ stream ~ ".writef(\"%s | %-7s > \", Clock.currTime(), \"" ~ name ~ "\");
@@ -22,8 +22,8 @@ class logger {
         }
     }
     
-    mixin AddLogMethod!("info", "stdout");
-    mixin AddLogMethod!("deb", "stdout");
-    mixin AddLogMethod!("warning", "stderr");
-    mixin AddLogMethod!("error", "stderr");
+    mixin MTAddLogMethod!("info", "stdout");
+    mixin MTAddLogMethod!("deb", "stdout");
+    mixin MTAddLogMethod!("warning", "stderr");
+    mixin MTAddLogMethod!("error", "stderr");
 }

@@ -1,8 +1,8 @@
-module meta.utils.runtime_error;
+module skp.runtime_error;
 
 import std.exception;
 
-class runtime_error : Exception {
+class CRuntimeError : Exception {
     this(string msg) {
         super("meta runtime error: " ~ msg);
     }
