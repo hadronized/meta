@@ -4,13 +4,12 @@ module meta.wrappers.devil.image;
 private {
     import std.string : toStringz;
     import meta.wrappers.devil.common;
-    import meta.wrappers.opengl.texture : texture_format;
+    import meta.wrappers.opengl.texture : texture_format_t;
 }
 public {
 }
 
-
-class image {
+class CImage {
     private {
         ILuint _;
         ILuint _w;
@@ -29,7 +28,7 @@ class image {
             return _;    
         }
 
-        texture_format format() const {
+        texture_format_t format() const {
             return _format;    
         }
 

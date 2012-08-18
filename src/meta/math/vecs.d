@@ -4,96 +4,95 @@ module meta.math.vecs;
 private {
     import std.algorithm : reduce;
     import std.math : sqrt;
-    import meta.utils.traits;
+    import skp.traits;
 } public {
 }
 
-
 /* TODO: add common and useful math op */
-struct vec(uint D, T) if (D >= 2 && D <= 4) {
-    mixin template AddCompProperties(string name, uint i) {
+struct SVec(uint D_, T_) if (D_ >= 2 && D_ <= 4) {
+    mixin template MTAddCompProperties(string N_, uint I_) {
         mixin("
-            @property T " ~ name ~ "() const {
-                return _[i];
+            @property T_ " ~ N_ ~ "() const {
+                return _[I_];
             }
 
-            @property T " ~ name ~ "(in T v) {
-                return _[i] = v;
+            @property T_ " ~ N_ ~ "(in T_ v) {
+                return _[I_] = v;
             }");
     }
 
     /* components */
-    private T[D] _;
+    private T_[D_] _;
 
-    /* make vec usable such as array */
+    /* make SVec usable such as array */
     alias _ this;
 
-    mixin AddCompProperties!("x", 0u);
-    mixin AddCompProperties!("r", 0u);
-    mixin AddCompProperties!("y", 1u);
-    mixin AddCompProperties!("g", 1u);
-    static if (D > 2) {
-        mixin AddCompProperties!("z", 2u);
-        mixin AddCompProperties!("b", 2u);
+    mixin MTAddCompProperties!("x", 0u);
+    mixin MTAddCompProperties!("r", 0u);
+    mixin MTAddCompProperties!("y", 1u);
+    mixin MTAddCompProperties!("g", 1u);
+    static if (D_ > 2) {
+        mixin MTAddCompProperties!("z", 2u);
+        mixin MTAddCompProperties!("b", 2u);
     }
-    static if (D > 3) {
-        mixin AddCompProperties!("w", 3u);
-        mixin AddCompProperties!("a", 3u);
+    static if (D_ > 3) {
+        mixin MTAddCompProperties!("w", 3u);
+        mixin MTAddCompProperties!("a", 3u);
     }
 
-    inout(T)[D] as_array() inout @property {
+    inout(T_)[D_] as_array() inout @property {
         return _;
     }
 
-    inout(T) * ptr() inout @property {
+    inout(T_) * ptr() inout @property {
         return _.ptr;
     }
 
 
-    alias D length;
-    alias T value_type;
+    alias D_ length;
+    alias T_ value_type;
 
-    this(P...)(P params) if (params.length <= D) {
+    this(P...)(P params) if (params.length <= D_) {
         set_!0u(params);
     }
 
-    /* This method recursively builds the vec */
-    private void set_(uint I, H, R...)(H head, R remaining) if (I <= D) {
-        static if (is(H : T)) {
+    /* This method recursively builds the SVec */
+    private void set_(uint I_, H_, R_...)(H_ head, R_ remaining) if (I_ <= D_) {
+        static if (is(H_ : T_)) {
             /* we can directly set the corresponding component */
-            _[I] = head;
+            _[I_] = head;
             /* and go to the next component */
-            set_!(I+1)(remaining);
+            set_!(I_+1)(remaining);
         } else {
-            static if (Has!(H, "slice")) { /* TODO: I think we have to test if H has slice, not vec, which obviously has it */
-                _[I..I+H.length] = head[];
-                set_!(I+H.length)(remaining);
+            static if (THas!(H_, "slice")) { /* TODO: I think we have to test if H has slice, not SVec, which obviously has it */
+                _[I_..I_+H_.length] = head[];
+                set_!(I_+H_.length)(remaining);
             } else {
-                static assert (0, "cannot assign " ~ H.stringof ~ " to " ~ typeof(this).stringof);
+                static assert (0, "cannot assign " ~ H_.stringof ~ " to " ~ typeof(this).stringof);
             }
         }
     }
 
     /* terminal version of the set_ template method */
-    private void set_(uint I)() {
+    private void set_(uint I_)() {
     }
 
     /* operators */
-    ref vec opAssign(in vec rhs) {
+    ref SVec opAssign(in SVec rhs) {
         set_!0u(rhs);
         return this;
     }
 
-    /* make vec sliceable */
-    const(T)[] opSlice(size_t x, size_t y) const {
+    /* make SVec sliceable */
+    const(T_)[] opSlice(size_t x, size_t y) const {
         return _[x..y];
     }
 
-    const(T)[] opSlice() const {
+    const(T_)[] opSlice() const {
         return _;
     }
 
-    static if (__traits(isArithmetic, T)) {
+    static if (__traits(isArithmetic, T_)) {
         float norm() const @property {
             return sqrt(reduce!("a + b*b")(0.0f, _));
         }
@@ -107,10 +106,10 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
         }
 
         /* TODO: we can optimize this method */
-        vec opBinary(string op)(in vec rhs) const if (op == "-" || op == "+") {
-            vec r;
-            foreach (i; 0..D)
-                mixin("r[i] = _[i]" ~ op ~ "rhs[i];");
+        SVec opBinary(string O_)(in SVec rhs) const if (O_ == "-" || O_ == "+") {
+            SVec r;
+            foreach (i; 0..D_)
+                mixin("r[i] = _[i]" ~ O_ ~ "rhs[i];");
             return r;
         }
 
@@ -118,15 +117,15 @@ struct vec(uint D, T) if (D >= 2 && D <= 4) {
 }
 
 
-/* common vecs */
-alias vec!(2, float) vec2;
-alias vec!(3, float) vec3;
-alias vec!(4, float) vec4;
+/* common SVecs */
+alias SVec!(2, float) SVec2;
+alias SVec!(3, float) SVec3;
+alias SVec!(4, float) SVec4;
 
 
 /* trait */
-template vec_trait(V : vec!(D, T), uint D, T) {
-    alias D dimension;
-    alias T value_type;
+template TVecTrait(V_ : SVec!(D_, T_), uint D_, T_) {
+    alias D_ dimension;
+    alias T_ value_type;
 }
 

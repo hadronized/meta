@@ -5,14 +5,13 @@ private {
 }
 public {
     import derelict.glfw3.glfw3;
-    import meta.utils.logger;
-    import meta.utils.runtime_error;
+    import skp.logger;
+    import skp.runtime_error;
 }
-
 
 /* static ctor */
 static this() {
-    logger.inst().deb("Initializing glfw module");
+    CLogger.inst().deb("Initializing glfw module");
 
     /* glfw initialization */
     try {
@@ -20,11 +19,11 @@ static this() {
         if (!glfwInit())
             throw new Error("failed to init");
     } catch (Error e) {
-        throw new wrapper_not_loaded("glfw", e.msg);
+        throw new CWrapperNotLoaded("glfw", e.msg);
     }
     if (!DerelictGLFW3.isLoaded())
-        throw new wrapper_not_loaded("glfw", "unknown");
+        throw new CWrapperNotLoaded("glfw", "unknown");
 
-    logger.inst().deb("Successfully initialized glfw module");
+    CLogger.inst().deb("Successfully initialized glfw module");
 }
 

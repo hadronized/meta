@@ -4,43 +4,41 @@ module meta.render.drivers.opengl.mesh_renderer;
 private {
     import meta.models.mesh;
     import meta.render.adaptors.mesh_renderer;
-    import meta.utils.fields;
-    import meta.utils.logger;
     import meta.wrappers.opengl.buffer;
+    import skp.fields;
+    import skp.logger;
 }
 public {
 }
 
-
-mixin template ArrayFields(F...) {
-    static if (F.length && !(F.length & 1)) {
-        mixin ArrayFields!(F[2 .. F.length]);
-        mixin Fields!(F[0][], F[1] ~ "v");
+private mixin template MTArrayFields(F_...) {
+    static if (F_.length && !(F_.length & 1)) {
+        mixin MTArrayFields!(F_[2 .. F_.length]);
+        mixin Fields!(F_[0][], F_[1] ~ "v");
     }   
 }
 
-struct mesh_deintarlacer(V) {
-    mixin ArrayFields!(V.fields_list);
+struct SMeshDeintarlacer(V_) {
+    mixin MTArrayFields!(V_.fields_list);
 
-    this(mesh!V m) in {
+    this(mesh!V_ m) in {
         assert ( m !is null );
     } body {
     }
 }
 
-class mesh_renderer_gl : mesh_renderer {
+class CMeshRendererGL : IMeshRenderer {
     private {
-        buffer _vbo;
+        CBuffer _vbo;
     }
 
-    this(V)(mesh!V m) in {
+    this(V_)(mesh!V_ m) in {
         assert ( m !is null );
     } body {
-        auto deint = new mesh_deinterlacer!V.fields_list;
+        auto deint = new CMeshDeinterlacer!V_;
         auto vert = m.vertices;
 
-        _vbo = new buffer;
-
+        _vbo = new CBuffer;
     }
 }
 

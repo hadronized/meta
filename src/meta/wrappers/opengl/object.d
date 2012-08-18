@@ -6,15 +6,12 @@ private {
 public {
 }
 
+mixin template MTGLObject(T_) {
+    mixin MTGLError;
 
-/* GLObject mixin template */
-mixin template GLObject(T) {
-    mixin GLError;
+    private T_ _id;
 
-    private T _id;
-
-    T id() const @property {
+    T_ id() const @property {
         return _id;
     }
 }
-

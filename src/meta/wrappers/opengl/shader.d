@@ -7,29 +7,25 @@ private {
 public {
 }
 
-
 /* runtime error */
-class shader_compilation_error : runtime_error {
-    this(shader_type st, string reason) {
+class CShaderCompilationError : CRuntimeError {
+    this(EShaderType st, string reason) {
         super(to!string(st) ~ " shader failed to compile; reason:\n" ~ reason);
     }
 }
- 
 
-/* shader */
-enum shader_type : GLenum {
+enum EShaderType : GLenum {
     VERTEX   = GL_VERTEX_SHADER ,
     FRAGMENT = GL_FRAGMENT_SHADER,
     GEOMETRY = GL_GEOMETRY_SHADER
 }
 
+class CShader {
+    mixin MTGLObject!GLuint;
 
-class shader {
-    mixin GLObject!GLuint;
+    public immutable EShaderType type;
 
-    public immutable shader_type type;
-
-    this(shader_type st) {
+    this(EShaderType st) {
         type = st;
         _id = glCreateShader(type);
         fetch_error("this()");
@@ -43,19 +39,19 @@ class shader {
     void compile(string src) {
         auto ptr = src.ptr;
 
-        logger.inst().deb("pushing %s shader sources (id=%d)", to!string(type), _id);
+        CLogger.inst().deb("pushing %s shader sources (id=%d)", to!string(type), _id);
         /* set the source */
         glShaderSource(_id, 1, &ptr, cast(const(int)*)0);
         fetch_error("compile():source");
-        logger.inst().deb("successfully pushed %s shader sources! (id=%d)", to!string(type), _id);
+        CLogger.inst().deb("successfully pushed %s shader sources! (id=%d)", to!string(type), _id);
 
         /* compile the shader */
-        logger.inst().deb("compiling %s shader (id=%d)", to!string(type), _id);
+        CLogger.inst().deb("compiling %s shader (id=%d)", to!string(type), _id);
         glCompileShader(_id);
         fetch_error("compile():compilation");
         /* check enventual error(s) */
         check_compilation_();
-        logger.inst().deb("successfully compiled %s shader! (id=%d)", to!string(type), _id);
+        CLogger.inst().deb("successfully compiled %s shader! (id=%d)", to!string(type), _id);
     }
 
     private void check_compilation_() {
@@ -64,7 +60,7 @@ class shader {
         fetch_error("check_compilation()");
 
         if (status == GL_FALSE)
-            throw new shader_compilation_error(type, compilation_log_());
+            throw new CShaderCompilationError(type, compilation_log_());
     }
 
     private string compilation_log_() {
@@ -82,4 +78,3 @@ class shader {
         return log.idup;
     }
 }
-

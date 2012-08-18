@@ -6,26 +6,25 @@ private {
 }
 public {
     import derelict.opengl3.gl3;
-    import meta.utils.logger;
-    import meta.utils.runtime_error;
     import meta.wrappers.opengl.error;
     import meta.wrappers.opengl.object;
+    import skp.logger;
+    import skp.runtime_error;
 }
-
 
 /* static ctor */
 static this() {
-    logger.inst().deb("Initializing gl module");
+    CLogger.inst().deb("Initializing gl module");
         
     /* gl initialization */
     try {
         DerelictGL3.load();
     } catch (Error e) {
-        throw new wrapper_not_loaded("gl", e.msg);
+        throw new CWrapperNotLoaded("gl", e.msg);
     }
     if (!DerelictGL3.isLoaded())
-        throw new wrapper_not_loaded("gl", "unknown");
+        throw new CWrapperNotLoaded("gl", "unknown");
 
-    logger.inst().deb("Successfully initialized gl module");
+    CLogger.inst().deb("Successfully initialized gl module");
 }
 

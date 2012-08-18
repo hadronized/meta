@@ -7,11 +7,10 @@ private {
 public {
 }
 
+alias SVec!(4, int) SViewportParameters; /* x, y, w, h */
 
-alias vec!(4, int) viewport_parameters; /* x, y, w, h */
-
-class viewport {
-    mixin GLError;
+class CViewport {
+    mixin MTGLError;
 
     this() {
     }
@@ -21,11 +20,11 @@ class viewport {
         fetch_error("this()");
     }
 
-    viewport_parameters parameters() @property {
+    SViewportParameters parameters() @property {
         int[4] xywh;
         glGetIntegerv(GL_VIEWPORT, xywh.ptr);
         fetch_error("parameters()");
-        return viewport_parameters(xywh);
+        return SViewportParameters(xywh);
     }    
 }
 

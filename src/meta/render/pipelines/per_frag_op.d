@@ -12,7 +12,6 @@ private {
 public {
 }
 
-
 immutable auto PFO_VERTEX_SHADER_SRC = "
 #version 300
 in vec4 co;
@@ -23,26 +22,26 @@ void main() {
 }";
 
 version(wip) {
-class per_frag_op {
-    alias vec!(2, float) virt_screen_vertex_co;
+class CPerFragOp {
+    alias SVec2 SVirtScreenVertexCo;
 
-    class virt_screen_vertex {
-        virt_screen_vertex_co co;
+    class CVirtScreenVertex {
+        SVirtScreenVertexCo co;
 
-        this(virt_screen_vertex_co co) {
+        this(SVirtScreenVertexCo co) {
             this.co = co;
         }
     }
 
-    alias mesh!virt_screen_vertex virt_screen;
+    alias CMesh!SVirtScreenVertex CVirtScreen;
     
     private {
-        buffer _vbo;
-        buffer _ibo;
-        va _va;
-        shader _vs;
-        shader _fs;
-        shader_program _sp;
+        CBuffer _vbo;
+        CBuffer _ibo;
+        CVA _va;
+        CShader _vs;
+        CShader _fs;
+        CShaderProgram _sp;
     }
 
     this(string src) {
@@ -54,32 +53,31 @@ class per_frag_op {
         _vs.compile(PFO_VERTEX_SHADER_SRC);
         _fs.compile(src);
         with (_sp) {
-            attach(_vs);
-            attach(_fs);
+            attach(_vs, _fs);
             link();
         }
     }
 
     private void init_buffers_() {
         /* VBO initialization */
-        _vbo = new buffer(buffer_type.ARRAY);
+        _vbo = new SBbuffer(EBufferType.ARRAY);
         auto screen = create_virt_screen();
 
         with (_vbo) {
             use();
-            commit(screen.sizeof, screen.vertices.ptr.co.as_array.ptr, buffer_usage.DYNAMIC_DRAW);
+            commit(screen.sizeof, screen.vertices.ptr.co.as_array.ptr, EBufferUsage.DYNAMIC_DRAW);
             done();
         }
     }
 
     private virt_screen create_virt_screen() {
         /* a virtual screen has 4 vertices, i.e. the 4 corners of the screen */
-        auto screen = new virt_screen;
+        auto screen = new SVirtScreen;
         with (screen) {
-            add_vertex( new virt_screen_vertex_co(-1.,  1.) );
-            add_vertex( new virt_screen_vertex_co( 1.,  1.) );
-            add_vertex( new virt_screen_vertex_co( 1., -1.) );
-            add_vertex( new virt_screen_vertex_co(-1., -1.) );
+            add_vertex( new SVirtScreenVertexCo(-1.,  1.) );
+            add_vertex( new SVirtScreenVertexCo( 1.,  1.) );
+            add_vertex( new SVirtScreenVertexCo( 1., -1.) );
+            add_vertex( new SVirtScreenVertexCo(-1., -1.) );
         }
 
         return screen;
@@ -89,8 +87,8 @@ class per_frag_op {
     }
 
     unittest {
-        auto fs = new shader(shader_type.FRAGMENT);
-        auto pfo = new per_frag_op(fs);
+        auto fs = new CShader(EShaderType.FRAGMENT);
+        auto pfo = new CPerFragOp(fs);
 
         pfo.apply();
     }

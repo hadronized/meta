@@ -10,8 +10,7 @@ private {
 public {
 }
 
-
-enum buffer_type {
+enum EBufferType {
     NONE          ,
     ARRAY         = GL_ARRAY_BUFFER,
     ELEMENT_ARRAY = GL_ELEMENT_ARRAY_BUFFER,
@@ -19,21 +18,21 @@ enum buffer_type {
     UNIFORM       = GL_UNIFORM_BUFFER
 }
 
-enum buffer_usage {
+enum EBufferUsage {
     STREAM_DRAW  = GL_STREAM_DRAW,
     STATIC_DRAW  = GL_STATIC_DRAW,
     DYNAMIC_DRAW = GL_DYNAMIC_DRAW,
     DYNAMIC_COPY = GL_DYNAMIC_COPY
 }
 
-enum buffer_access {
+enum EBufferAccess {
     READ       = GL_READ_ONLY,
     WRITE      = GL_WRITE_ONLY,
     READ_WRITE = GL_READ_WRITE
 }
 
-class buffer {
-    mixin GLObject!uint;
+class CBuffer {
+    mixin MTGLObject!uint;
 
     this() {
         glGenBuffers(1, &_id);
@@ -46,12 +45,12 @@ class buffer {
     }
 }
 
-struct buffer_binder {
-    mixin GLError;
+struct SBbufferBinder {
+    mixin MTGLError;
 
-    private buffer_type _type;
+    private EBufferType _type;
 
-    this(const buffer b, buffer_type t) in {
+    this(const CBuffer b, EBufferType t) in {
         assert ( b !is null );
     } body {
         _type = t;
@@ -62,7 +61,7 @@ struct buffer_binder {
         glBindBuffer(_type, 0);
     }
 
-    void bind(const buffer b) in {
+    void bind(const CBuffer b) in {
         assert ( b !is null );
     } body {
         glBindBuffer(_type, 0);
@@ -70,7 +69,7 @@ struct buffer_binder {
         fetch_error("bind()");
     }
 
-    void commit(uint size, void *data, buffer_usage usage) {
+    void commit(uint size, void *data, EBufferUsage usage) {
         glBufferData(_type, size, data, usage);
         fetch_error("commit()");
     }
@@ -80,13 +79,13 @@ struct buffer_binder {
         fetch_error("update()");
     }
 
-    void * map(buffer_access a) {
+    void * map(EBufferAccess a) {
         auto mapped = glMapBuffer(_type, a);
         fetch_error("map()");
         return mapped;
     }
 
-    void * map(int offset, uint length, buffer_access a) {
+    void * map(int offset, uint length, EBufferAccess a) {
         auto mapped = glMapBufferRange(_type, offset, length, a);
         fetch_error("map() range");
         return mapped;

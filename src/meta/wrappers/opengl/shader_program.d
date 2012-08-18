@@ -7,18 +7,16 @@ private {
 public {
 }
 
-
 /* runtime error */
-class shader_program_error : runtime_error {
+class CShaderProgramError : CRuntimeError {
     this(string reason) {
         super("shader program error; reason: " ~ reason);
     }
 }
 
 
-/* shader program */
-class shader_program {
-    mixin GLObject!GLuint;
+class CShaderProgram {
+    mixin MTGLObject!GLuint;
 
     this() {
         _id = glCreateProgram();
@@ -29,32 +27,32 @@ class shader_program {
         glDeleteProgram(_id);
     }
 
-    void attach(S...)(shader s, S others) {
-        logger.inst().deb("attaching %s shader (shader_id=%d, shader_program_id=%d)", to!string(s.type), s.id, _id);
+    void attach(S_...)(CShader s, S_ others) {
+        CLogger.inst().deb("attaching %s shader (shader_id=%d, shader_program_id=%d)", to!string(s.type), s.id, _id);
         glAttachShader(_id, s.id);
         fetch_error("attach()");
-        logger.inst().deb("successfully attached %s shader (shader_id=%d, shader_program_id=%d)", to!string(s.type), s.id, _id);
+        CLogger.inst().deb("successfully attached %s shader (shader_id=%d, shader_program_id=%d)", to!string(s.type), s.id, _id);
         
         static if (others.length)
             attach(others);
     }
 
-    void detach(S...)(shader s, S others) {
-        logger.inst().deb("detaching %s shader (shader_id=%d, shader_program_id=%d)", to!string(s.type), s.id, _id);
+    void detach(S_...)(CShader s, S_ others) {
+        CLogger.inst().deb("detaching %s shader (shader_id=%d, shader_program_id=%d)", to!string(s.type), s.id, _id);
         glDetachShader(_id, s.id);
         fetch_error("detach()");
-        logger.inst().deb("successfully detached %s shader (shader_id=%d, shader_program_id=%d)", to!string(s.type), s.id, _id);
+        CLogger.inst().deb("successfully detached %s shader (shader_id=%d, shader_program_id=%d)", to!string(s.type), s.id, _id);
 
         static if (others.length)
             detach(others);
     }
 
     void link() {
-        logger.inst().deb("linking shader program (id=%d)", _id);
+        CLogger.inst().deb("linking shader program (id=%d)", _id);
         glLinkProgram(_id);
         fetch_error("link()");
         check_link_();
-        logger.inst().deb("successfully linked shader program (id=%d)", _id);
+        CLogger.inst().deb("successfully linked shader program (id=%d)", _id);
         version ( OSX ) {
         } else {
             debug check_validation_();
@@ -67,7 +65,7 @@ class shader_program {
         fetch_error("check_link_()");
         
         if (status == GL_FALSE)
-            throw new shader_program_error("shader program failed to link; reason:\n" ~ link_log_());
+            throw new CShaderProgramError("shader program failed to link; reason:\n" ~ link_log_());
     }
 
     private string link_log_() {
@@ -93,7 +91,7 @@ class shader_program {
         fetch_error("check_validation_():status");
         
         if (valid == GL_FALSE)
-            throw new shader_program_error("shader program isn't valid; reason:\n" ~ link_log_());
+            throw new CShaderProgramError("shader program isn't valid; reason:\n" ~ link_log_());
     }
 
     public void use() {

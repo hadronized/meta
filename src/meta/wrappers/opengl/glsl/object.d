@@ -7,9 +7,8 @@ public {
 private {
 }
 
-
-mixin template GLSLObject() {
-    mixin GLObject!GLint;
+mixin template MTGLSLObject() {
+    mixin MTGLObject!GLint;
 
     public immutable string name;
 

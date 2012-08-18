@@ -9,23 +9,22 @@ public {
     import meta.wrappers.opengl.viewport;
 }
 
-
 /* buffer bit */
-enum buffer_bit {
+enum EBufferBit {
     COLOR = GL_COLOR_BUFFER_BIT,
     DEPTH = GL_DEPTH_BUFFER_BIT
 }
 
 /* gl device */
-class device {
-    mixin GLError;
+class CDevice {
+    mixin MTGLError;
 
-    void clear(buffer_bit bb) {
+    void clear(EBufferBit bb) {
         glClear(bb);
         fetch_error("clear()");
     }
     
-    void set_clear_color(ref const color c) {
+    void set_clear_color(ref const SColor c) {
         glClearColor(c.r, c.g, c.b, c.a);
         fetch_error("set_clear_color()");
     }

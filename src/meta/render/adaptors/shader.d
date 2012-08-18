@@ -1,13 +1,11 @@
 module meta.render.adaptors.shader;
 
-
-interface shader {
+interface IShader {
     void compile(string src);
 }
 
-
-interface shader_program {
-    void attach(S...)(shader s, S others);
-    void detach(S...)(shader s, S others);
+interface IShaderProgram {
+    void attach(S_...)(IShader s, S_ others);
+    void detach(S_...)(IShader s, S_ others);
     void link();
 }    

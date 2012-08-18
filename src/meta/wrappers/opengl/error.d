@@ -7,9 +7,8 @@ private {
 public {
 }
 
-
 /* runtime error */
-class globject_error : runtime_error {
+class CGLObjectError : CRuntimeError {
     this(string context, string reason) {
         super("\'" ~ context ~ "\' committed an error; reason: " ~ reason);
     }
@@ -17,7 +16,7 @@ class globject_error : runtime_error {
 
 
 /* GLErrorGetter mixin template */
-mixin template GLError() {
+mixin template MTGLError() {
     private GLenum _lastError;
 
     GLenum last_error() const @property {
@@ -51,39 +50,36 @@ mixin template GLError() {
                 break;
 
             default :
-                throw new globject_error(fullContext, "unknown error");
+                throw new CGLObjectError(fullContext, "unknown error");
         }
 
-        throw new globject_error(fullContext, trmsg);
+        throw new CGLObjectError(fullContext, trmsg);
     }
 }
 
-
 /* error trap class; used to discard gl errors */
-scope class error_trap {
-    mixin GLError;
+scope class CErrorTrap {
+    mixin MTGLError;
 
     this() {
         do {
             try {
                 fetch_error(null);
             } catch(Error e) {}
-            logger.inst().deb("avoiding gl error %d", _lastError);
+            CLogger.inst().deb("avoiding gl error %d", _lastError);
         } while (_lastError != GL_NO_ERROR);
     }
 }
 
-
-/* avoid_gl_errors(); publicly used to discard gl errors and get a stable GL context */
+/* publicly used to discard gl errors and get a stable GL context */
 void discard_gl_errors() {
-    scope auto avoider = new error_trap;
+    scope auto avoider = new CErrorTrap;
 }
 
 
 /* runtime error */
-class context_error : runtime_error {
+class CContextError : CRuntimeError {
     this(string reason) {
         super("context error; reason: " ~ reason);
     }
 }
-

@@ -7,9 +7,8 @@ public {
 private {
 }
 
-
-class va {
-    mixin GLObject!uint;
+class CVA {
+    mixin MTGLObject!uint;
 
     this() {
         glGenVertexArrays(1, &_id);

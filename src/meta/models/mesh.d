@@ -3,15 +3,14 @@ module meta.models.mesh;
 /* imports */
 private {
     import meta.math.vecs;
-    import meta.utils.fields;
+    import skp.fields;
 }
 public {
 }
 
-
-class mesh(V) {
+class CMesh(V_) {
     alias ulong vertex_id;
-    alias V vertex_t;
+    alias V_ vertex_t;
 
     protected vertex_t[] _vertices;
 
@@ -26,19 +25,19 @@ class mesh(V) {
     }
 }
 
-struct vertex(VD...) {
-    alias VD definition_list;
-    mixin Fields!(VD);
+struct SVertex(VD_...) {
+    alias VD_ definition_list;
+    mixin MTFields!(VD_);
 }
 
-alias vec3 space_co;
-alias vec3 normal;
-alias vec2 uv_co;
+alias SVec3 SCoord;
+alias SVec3 SNormal;
+alias SVec2 SUVCoord;
 
 
 unittest {
-    alias vertex!(vec3, "sco") vert;
+    alias SVertex!(SCoord, "sco") SVert;
 
-    auto v = vert();
-    v.sco = vec3(1, 2, 3);
+    auto v = SVert();
+    v.sco = SVec3(1, 2, 3);
 }

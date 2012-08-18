@@ -5,8 +5,8 @@ private {
 }
 public {
     import derelict.devil.il;
-    import meta.utils.logger;
-    import meta.utils.runtime_error;
+    import skp.logger;
+    import skp.runtime_error;
 }
 
 
@@ -14,19 +14,17 @@ enum WRAPPER_NAME = "devil";
 
 /* static ctor */
 static this() {
-    logger.inst().deb("Initializing " ~ WRAPPER_NAME ~ " module");
+    CLogger.inst().deb("Initializing %s module", WRAPPER_NAME);
 
     /* devil initialization */
     DerelictIL.load();
     if (!DerelictIL.isLoaded())
-        throw new wrapper_not_loaded(WRAPPER_NAME, "unknown");
+        throw new CWrapperNotLoaded(WRAPPER_NAME, "unknown");
 
     ilInit();
-    logger.inst().deb("Successfully initialized " ~ WRAPPER_NAME ~ " module");
+    CLogger.inst().deb("Successfully initialized %s module", WRAPPER_NAME);
 }
 
 static ~this() {
     ilShutDown();
 }
-
-

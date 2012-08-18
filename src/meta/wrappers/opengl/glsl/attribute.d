@@ -3,21 +3,20 @@ module meta.wrappers.opengl.glsl.attribute;
 /* imports */
 public {
     import meta.math.vecs;
-    import meta.utils.traits;
     import meta.wrappers.opengl.type;
     import meta.wrappers.opengl.shader_program;
     import meta.wrappers.opengl.glsl.object;
+    import skp.traits;
 }
 private {
 }
 
-
 /* attribute */
-class attribute(T) {
-    mixin GLSLObject;
+class CAttribute(T_) {
+    mixin MTGLSLObject;
 
     this(string name) {
-          this.name = name;
+        this.name = name;
         _id = init;
     }
 
@@ -38,23 +37,23 @@ class attribute(T) {
         _id = l;
 
         if (_id != init) 
-            logger.inst().deb("attribute \'%s\' is active for shader program (id=%d)", name, sp.id);
+            CLogger.inst().deb("attribute \'%s\' is active for shader program (id=%d)", name, sp.id);
     }
 
     /* static if to determine if T is simple int, float, or what */
-    static if ( is(T == float) || is(T == int) || is(T == uint) || is(T == double) ) {
+    static if ( is(T_ == float) || is(T_ == int) || is(T_ == uint) || is(T_ == double) ) {
         mixin("
-            void pointer(" ~ T.stringof ~ " *p, uint stride, bool normalized) {
-                glVertexAttribPointer(_id, 1, " ~ GLTypeOf!T ~ ", normalized, stride, p);
+            void pointer(" ~ T_.stringof ~ " *p, uint stride, bool normalized) {
+                glVertexAttribPointer(_id, 1, " ~ TGLTypeOf!T_ ~ ", normalized, stride, p);
                 fetch_error(\"pointer()\");
             }
         ");
     }
 
     /* static if to determine if T is vec */
-    static if (Like!(T, "array")) {
-        alias vec_trait!(T).dimension dimension;
-        alias vec_trait!T.value_type value_type;
+    static if (TLike!(T_, "array")) {
+        alias CVecTrait!T_.dimension dimension;
+        alias CVecTrait!T_.value_type value_type;
 
         mixin("
             void pointer(" ~ value_type.stringof ~ " *p, uint stride, bool normalized) {

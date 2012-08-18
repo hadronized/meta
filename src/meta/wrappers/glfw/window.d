@@ -9,18 +9,16 @@ private {
 public {
 }
 
-
 /* window error */
-class window_error : runtime_error {
+class CWindowError : CRuntimeError {
     this(string reason) {
         super("window error; reason: " ~ reason);
     }
 }
 
-
 /* window class */
 /* TODO: if full=true, exception thrown, fixit */
-class window {
+class CWindow {
     private GLFWwindow _window; /* wrapped window */
 
     this(int majver, int minver, int w, int h, bool full, string title) {
@@ -31,11 +29,11 @@ class window {
         _window = glfwOpenWindow(w, h, GLFW_WINDOWED | (full ? GLFW_FULLSCREEN : 0), cast(const(char)*)title, null);
         if (_window == null) {
             auto errstr = to!string(glfwErrorString(glfwGetError()));
-            throw new window_error("unable to create the window; glfw error: " ~ errstr);
+            throw new CWindowError("unable to create the window; glfw error: " ~ errstr);
         }
-        logger.inst().deb("Created a window {(%dx%d), fullscreen=%s}", w, h, full ? "on" : "off");
+        CLogger.inst().deb("Created a window {(%dx%d), fullscreen=%s}", w, h, full ? "on" : "off");
         DerelictGL3.reload();
-        logger.inst().deb("Reloaded GL3 module");
+        CLogger.inst().deb("Reloaded GL3 module");
     }
 
     ~this() {
@@ -49,7 +47,7 @@ class window {
             glfwPollEvents();
     }
 
-    key_state state(key k) {
+    key_state_t state(key_t k) {
         return glfwGetKey(_window, k);
     }
 
@@ -64,20 +62,19 @@ class window {
 
 
 /* keyboard key */
-alias int key;
+alias int key_t;
 
 /* key states */
-alias int key_state;
+alias int key_state_t;
 alias GLFW_PRESS   KS_PRESSED;
 alias GLFW_RELEASE KS_RELEASED;
 
 /* special keys*/
-alias int special_key;
+alias int special_key_t;
 alias GLFW_KEY_SPACE SK_SPACE;
 alias GLFW_KEY_ESC   SK_ESC;
 alias GLFW_KEY_ENTER SK_ENTER;
 
 /* window params */
-alias int window_param;
+alias int window_param_t;
 //alias GLFW_OPENED WP_OPENED;
-

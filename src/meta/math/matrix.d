@@ -7,9 +7,7 @@ private {
 public {
 }
 
-
-/* for now, mat is just a 4x4 matrix */
-struct mat {
+struct SMat44 {
     private float[4][4] _;
     alias _ this;
 
@@ -18,9 +16,8 @@ struct mat {
     }
 }
 
-
 /* matrix generators */
-mat make_perspective(float fovy, float ratio, float znear, float zfar) in {
+SMat44 make_perspective(float fovy, float ratio, float znear, float zfar) in {
     assert ( fovy > 0.0f );
     assert ( ratio > 0.0f );
     assert ( znear < zfar );
@@ -30,8 +27,8 @@ mat make_perspective(float fovy, float ratio, float znear, float zfar) in {
     float inf = 1.0f / (znear - zfar);
     float nfinf = (znear + zfar) * inf;
 
-    return mat([
-			[ itanfovyr,     0.0f,  0.0f,    0.0f ],
+    return SMat44([
+            [ itanfovyr,     0.0f,  0.0f,    0.0f ],
             [      0.0f, itanfovy,  0.0f,    0.0f ],
             [      0.0f,     0.0f,   inf,   -1.0f ], 
             [      0.0f,     0.0f, nfinf,    0.0f ]

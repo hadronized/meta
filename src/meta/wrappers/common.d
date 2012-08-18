@@ -4,11 +4,11 @@ module meta.wrappers.common;
 private {
 }
 public {
-    import meta.utils.runtime_error;
+    import skp.runtime_error;
 }
 
 /* runtime error */
-class wrapper_not_loaded : runtime_error {
+class CWrapperNotLoaded : CRuntimeError {
     this(string wrapper, string reason) {
         super("failed to load the wrapper \'" ~ wrapper ~ "\'; reason: " ~ reason);
     }

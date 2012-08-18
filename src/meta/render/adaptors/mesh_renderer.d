@@ -6,6 +6,5 @@ private {
 public {
 }
 
-
-interface mesh_renderer {
+interface IMeshRenderer {
 }
