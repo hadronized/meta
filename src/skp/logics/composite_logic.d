@@ -1,17 +1,16 @@
-module meta.logics.composite_logic;
+module skp.logics.composite_logic;
 
 /* imports */
 private {
-    import meta.logics.logic;
+    import skp.logics.logic;
 }
 public {
 }
 
+abstract class ACompositeLogic : ILogic {
+    protected ILogic[] _logics;
 
-abstract class composite_logic : logic {
-    protected logic[] _logics;
-
-    void install_logic(logic l) {
+    void install_logic(ILogic l) {
         ++_logics.length;
         _logics[$-1] = l;
     }
