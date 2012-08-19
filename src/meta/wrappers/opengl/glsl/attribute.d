@@ -30,7 +30,7 @@ class CAttribute(T_) {
         fetch_error("disable()");
     }
 
-    void into(shader_program sp) {
+    void into(CShaderProgram sp) {
         auto ptr = name.ptr;
         GLint l = glGetAttribLocation(sp.id, name.ptr);
         fetch_error("map()");
