@@ -52,8 +52,8 @@ class CAttribute(T_) {
 
     /* static if to determine if T is vec */
     static if (TLike!(T_, "array")) {
-        alias CVecTrait!T_.dimension dimension;
-        alias CVecTrait!T_.value_type value_type;
+        alias TVecTrait!T_.dimension dimension;
+        alias TVecTrait!T_.value_type value_type;
 
         mixin("
             void pointer(" ~ value_type.stringof ~ " *p, uint stride, bool normalized) {
