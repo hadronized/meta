@@ -45,7 +45,7 @@ class CBuffer {
     }
 }
 
-struct SBbufferBinder {
+struct SBufferBinder {
     mixin MTGLError;
 
     private EBufferType _type;
