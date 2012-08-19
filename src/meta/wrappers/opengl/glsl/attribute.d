@@ -57,7 +57,7 @@ class CAttribute(T_) {
 
         mixin("
             void pointer(" ~ value_type.stringof ~ " *p, uint stride, bool normalized) {
-                glVertexAttribPointer(_id, " ~ dimension.stringof[0] ~ ", " ~ GLTypeOf!(value_type).stringof ~ ", normalized, stride, p);
+                glVertexAttribPointer(_id, " ~ dimension.stringof[0] ~ ", " ~ TGLTypeOf!(value_type).stringof ~ ", normalized, stride, p);
                 fetch_error(\"pointer()\");
             }
         ");
