@@ -18,5 +18,5 @@ enum EGLType : typeof(GL_FLOAT) {
 /* useful template that converts a primary type (int, float, uint, ...) to its OpenGL enum type equivalent (INT,
    FLOAT, UINT, ...) */
 template TGLTypeOf(T_) if (__traits(isArithmetic, T_)) {
-    mixin("alias gltype." ~ toUpper(T_.stringof) ~ " TGLTypeOf;");
+    mixin("alias EGLType." ~ toUpper(T_.stringof) ~ " TGLTypeOf;");
 }
