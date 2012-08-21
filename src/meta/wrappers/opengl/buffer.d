@@ -64,7 +64,7 @@ struct SBufferBinder {
     void bind(const CBuffer b, EBufferType t) in {
         assert ( b !is null );
     } body {
-        //glBindBuffer(_type, 0);
+        glBindBuffer(_type, 0);
         glBindBuffer(t, b.id);
         fetch_error("bind()");
     }
