@@ -69,7 +69,7 @@ struct SBufferBinder {
         fetch_error("bind()");
     }
 
-    void commit(uint size, void *data, EBufferUsage usage) {
+    void commit(ulong size, void *data, EBufferUsage usage) {
         glBufferData(_type, size, data, usage);
         fetch_error("commit()");
     }
