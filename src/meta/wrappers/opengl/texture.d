@@ -111,7 +111,7 @@ scope class CTextureBinder {
         bind_(t, target);
     }
 
-    void texels(int level, texture_internal_format_t internal, uint w, uint h, int border, texture_format_t format, EGLType type, void *data) {
+    void commit(int level, texture_internal_format_t internal, uint w, uint h, int border, texture_format_t format, EGLType type, void *data) {
         glTexImage2D(_target, level, internal, w, h, border, format, type, data);
         fetch_error("texels()");
     }
