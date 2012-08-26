@@ -55,9 +55,9 @@ struct SFramebufferBinder {
     void bind(const CFramebuffer fb, EFramebufferTarget t) in {
         assert ( fb !is null );
     } body {
-        _target = t;
         glBindFramebuffer(t, fb.id);
         fetch_error("bind");
+        _target = t;
     }
 
     void attach(const CRenderbuffer rb, ERenderbufferTarget t, int a) {

@@ -23,7 +23,7 @@ enum ERenderbufferTarget {
     RENDERBUFFER = GL_RENDERBUFFER
 }
 
-struct SRenderBufferBinder {
+struct SRenderbufferBinder {
     mixin MTGLError;
 
     private ERenderbufferTarget _target;
@@ -41,7 +41,7 @@ struct SRenderBufferBinder {
     void bind(const CRenderbuffer rb, ERenderbufferTarget t) in {
         assert ( rb !is null );
     } body {
-		_target = t;
+        _target = t;
         glBindRenderbuffer(t, rb.id);
         fetch_error("bind");
     }
