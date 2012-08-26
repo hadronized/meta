@@ -28,7 +28,7 @@ enum EFramebufferTarget {
 
 
 template TFramebufferColorAttachment(int I_) {
-    enum TFramebufferColorAttachment = GL_COLOR_ATTACHMENT(I_);
+    enum TFramebufferColorAttachment = GL_COLOR_ATTACHMENT0+I_;
 }
 
 enum EFramebufferAttachment {
