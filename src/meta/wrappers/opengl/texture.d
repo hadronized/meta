@@ -90,7 +90,9 @@ enum ETextureParam {
 }
 
 enum ETextureParamValue {
-    LINEAR = GL_LINEAR
+    LINEAR = GL_LINEAR,
+    REPEAT = GL_REPEAT,
+    CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE
 }
 
 /* filter */
