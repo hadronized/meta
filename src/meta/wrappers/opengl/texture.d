@@ -81,21 +81,22 @@ alias GL_TEXTURE_WRAP_S TW_S;
 alias GL_TEXTURE_WRAP_T TW_T;
 alias GL_TEXTURE_WRAP_R TW_R;
 
-enum ETextureParamWrap {
-    S = GL_TEXTURE_WRAP_S,
-    T = GL_TEXTURE_WRAP_T,
-    R = GL_TEXTURE_WRAP_R
+enum ETextureParam {
+    WRAP_S = GL_TEXTURE_WRAP_S,
+    WRAP_T = GL_TEXTURE_WRAP_T,
+    WRAP_R = GL_TEXTURE_WRAP_R,
+    MIN_FILTER = GL_TEXTURE_MIN_FILTER,
+    MAG_FILTER = GL_TEXTURE_MAG_FILTER
+}
+
+enum ETextureParamValue {
+    LINEAR = GL_LINEAR
 }
 
 /* filter */
 alias texture_parameter_t texture_filter_t;
 alias GL_TEXTURE_MIN_FILTER TF_MIN;
 alias GL_TEXTURE_MAG_FILTER TF_MAG;
-
-enum ETextureParamFilter {
-    MIN = GL_TEXTURE_MIN_FILTER,
-    MAG = GL_TEXTURE_MAG_FILTER
-}
 
 class CTexture {
     mixin MTGLObject!uint;
@@ -137,12 +138,12 @@ struct STextureBinder {
         _target = target;
     }
 
-    void commit(int level, texture_internal_format_t internal, uint w, uint h, int border, texture_format_t format, EGLType type, void *data) {
+    void commit(int level, ETextureIntFormat internal, uint w, uint h, int border, ETextureFormat format, EGLType type, void *data) {
         glTexImage2D(_target, level, internal, w, h, border, format, type, data);
         fetch_error("commit");
     }
 
-    void parameter(texture_parameter_t param, texture_parameter_value_t value) {
+    void parameter(ETextureParam param, ETextureParamValue value) {
         glTexParameteri(_target, param, value);
         fetch_error("parameter");
     }
