@@ -60,12 +60,12 @@ struct SFramebufferBinder {
         fetch_error("bind");
     }
 
-    void attach(const CRenderbuffer rb, ERenderbufferTarget t, EFramebufferAttachment a) {
+    void attach(const CRenderbuffer rb, ERenderbufferTarget t, int a) {
         glFramebufferRenderbuffer(_target, a, t, rb.id);
         fetch_error("attach(renderbuffer)");
     }
 
-    void attach(const CTexture t, int level, EFramebufferAttachment a) {
+    void attach(const CTexture t, int level, int a) {
         glFramebufferTexture(_target, a, t.id, level);
         fetch_error("attach(texture)");
     }
