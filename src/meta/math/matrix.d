@@ -8,11 +8,25 @@ public {
 }
 
 struct SMat44 {
+    private alias typeof(this) that;
+
     private float[4][4] _;
     alias _ this;
 
-    inout(float) * ptr() inout @property {
-        return _.ptr.ptr;
+    @property {
+        that init() {
+            that r = void;
+            foreach (i; 0..4) {
+                r[i][i] = 1.0f;
+                foreach (j; (i+1)..4) 
+                    r[i][j] = r[j][i] = 0.0f;
+            }
+            return r;
+        }
+
+        inout(float) * ptr() inout {
+            return _.ptr.ptr;
+        }
     }
 }
 

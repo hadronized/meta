@@ -10,6 +10,8 @@ private {
 
 /* TODO: add common and useful math op */
 struct SVec(uint D_, T_) if (D_ >= 2 && D_ <= 4) {
+    private alias typeof(this) that;
+
     mixin template MTAddCompProperties(string N_, uint I_) {
         mixin("
             @property T_ " ~ N_ ~ "() const {
@@ -48,7 +50,6 @@ struct SVec(uint D_, T_) if (D_ >= 2 && D_ <= 4) {
         return _.ptr;
     }
 
-
     alias D_ length;
     alias T_ value_type;
 
@@ -78,7 +79,7 @@ struct SVec(uint D_, T_) if (D_ >= 2 && D_ <= 4) {
     }
 
     /* operators */
-    ref SVec opAssign(in SVec rhs) {
+    ref that opAssign(in that rhs) {
         set_!0u(rhs);
         return this;
     }
@@ -106,26 +107,53 @@ struct SVec(uint D_, T_) if (D_ >= 2 && D_ <= 4) {
         }
 
         /* TODO: we can optimize this method */
-        SVec opBinary(string O_)(in SVec rhs) const if (O_ == "-" || O_ == "+") {
-            SVec r;
+        that opBinary(string O_)(in that rhs) if (O_ == "-" || O_ == "+") {
+            that r = void;
             foreach (i; 0..D_)
                 mixin("r[i] = _[i]" ~ O_ ~ "rhs[i];");
             return r;
         }
 
+        that opBinary(string O_, S_)(S_ s) if (O_ == "/" || O_ == "*") in {
+            static if (O_ == "/")
+                assert ( O_ != 0.0f );
+        } body {
+            that r = void;
+            foreach (i; 0..D_)
+                mixin("r[i] = _[i]" ~ O_ ~ " s;");
+            return r;
+        }
+
+        /*
+        that opBinaryRight(string O_, S_)(S_ s) {
+            return opBinary!(O_)(s);
+        }
+        */
+
+        ref that opOpAssign(string op, A_)(A_ v) if (op == "/" || op == "*") {
+            foreach (ref x; _)
+                mixin("x" ~ op ~ "= v;");
+            return this;
+        }
+
+        static if (D_ == 3) {
+            auto opCast(SMat44)() {
+                SMat44 r;
+                foreach (i; 0..D_)
+                    r[i][3] = _[i];
+                return r;
+            }
+        }
     }
 }
-
 
 /* common SVecs */
 alias SVec!(2, float) SVec2;
 alias SVec!(3, float) SVec3;
 alias SVec!(4, float) SVec4;
 
-
 /* trait */
 template TVecTrait(V_ : SVec!(D_, T_), uint D_, T_) {
     alias D_ dimension;
     alias T_ value_type;
 }
-
