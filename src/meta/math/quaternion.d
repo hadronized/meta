@@ -73,21 +73,21 @@ struct SQuat {
         SMat44 r = void;
 
         for (auto i = 0; i < 3; ++i) {
-            r[i][3] = r[3][i] = 0.f;
-            r[15] = 1.f;
+            r[i][3] = r[3][i] = 0.0f;
+            r[15] = 1.0f;
         }
 
-        r[0][0] = 1.f - 2*rhs[1]*rhs[1] - 2*rhs[2]*rhs[2];
-        r[0][1] = 2*rhs[0]*rhs[1] - 2*rhs[3]*rhs[2];
-        r[0][2] = 2*rhs[0]*rhs[2] + 2*rhs[3]*rhs[1];
+        r[0][0] = 1.0f - 2*_axis.y*_axis.y - 2*_axis.z*_axis.z;
+        r[0][1] = 2*_axis.x*_axis.y - 2*_phi*_axis.z;
+        r[0][2] = 2*_axis.x*_axis.z + 2*_phi*_axis.y;
 
-        r[1][0] = 2*rhs[0]*rhs[1] + 2*rhs[3]*rhs[2];
-        r[1][1] = 1.f - 2*rhs[0]*rhs[0] - 2*rhs[2]*rhs[2];
-        r[1][2] = 2*rhs[1]*rhs[2] - 2*rhs[3]*rhs[0];
+        r[1][0] = 2*_axis.x*_axis.y + 2*_phi*_axis.z;
+        r[1][1] = 1.0f - 2*_axis.x*_axis.x - 2*_axis.z*_axis.z;
+        r[1][2] = 2*_axis.y*_axis.z - 2*_phi*_axis.x;
 
-        r[2][0] = 2*rhs[0]*rhs[2] - 2*rhs[3]*rhs[1];
-        r[2][1] = 2*rhs[1]*rhs[2] + 2*rhs[3]*rhs[0];
-        r[2][20] = 1.f - 2*rhs[0]*rhs[0] - 2*rhs[1]*rhs[1];
+        r[2][0] = 2*_axis.x*_axis.z - 2*_phi*_axis.y;
+        r[2][1] = 2*_axis.y*_axis.z + 2*_phi*_axis.x;
+        r[2][20] = 1.0f - 2*_axis.x*_axis.x - 2*_axis.y*_axis.y;
 
         return r;
     }
