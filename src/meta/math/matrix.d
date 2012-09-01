@@ -33,6 +33,19 @@ struct SMat44 {
         assert ( j < 4 );
         return _[i*4+j];
     }
+
+    ref that opOpAssign(string O_)(ref const that rhs) if (O_ == "*") {
+        that m = void;
+        foreach (i; 0..4) {
+            foreach (j; 0..4) {
+                m[i,j] = 0.0f;
+                foreach (k; 0..4)
+                    m[i,j] += this[i,k] * rhs[k, j];
+            }
+        }
+
+        return m;
+    }
 }
 
 /* matrix generators */
