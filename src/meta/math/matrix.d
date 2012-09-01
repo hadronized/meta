@@ -28,15 +28,17 @@ struct SMat44 {
         }
     }
 
+    bool opEquals(in that rhs) {
+        return _ == rhs._;
+    }
+
+    bool opEquals(float[16] rhs) {
+        return _ == rhs;
+    }
+
     ref that opAssign(in that rhs) {
         _[] = rhs._[];
         return this;
-    }
-
-    ref float opIndex(size_t i, size_t j) {
-        assert ( i < 4 );
-        assert ( j < 4 );
-        return _[i*4+j];
     }
 
     ref that opOpAssign(string O_)(in that rhs) if (O_ == "*") {
@@ -52,14 +54,19 @@ struct SMat44 {
         this = m;
         return this;
     }
-
     
-}
+    ref float opIndex(size_t i, size_t j) {
+        assert ( i < 4 );
+        assert ( j < 4 );
+        return _[i*4+j];
+    }
 
-SMat44 opBinary(string O_)(SMat44 lhs, in SMat44 rhs) if (O_ == "*") {
+    that opBinary(string O_)(that lhs, in that rhs) if (O_ == "*") {
         lhs *= rhs;
         return lhs;
     }
+}
+
 /* matrix generators */
 SMat44 make_perspective(float fovy, float ratio, float znear, float zfar) in {
     assert ( fovy > 0.0f );
@@ -77,4 +84,26 @@ SMat44 make_perspective(float fovy, float ratio, float znear, float zfar) in {
                  0.0f,     0.0f,   inf,   -1.0f, 
                  0.0f,     0.0f, nfinf,    0.0f 
     ]);
+}
+
+unittest {
+    /* identity test */
+    SMat44 m;
+    assert ( m == [
+            1.0f, 0.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f
+    ] );
+
+    /* assign operator and row major */
+    SMat44 m2 = m;
+    m2[2,3] = 3.14f;
+    assert ( m2 == [
+            1.0f, 0.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 3.14f,
+            0.0f, 0.0f, 0.0f, 1.0f
+    ] );
+
 }
