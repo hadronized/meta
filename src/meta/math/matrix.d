@@ -28,7 +28,7 @@ struct SMat44 {
         }
     }
 
-    ref that opAssign(ref const that rhs) {
+    ref that opAssign(in that rhs) {
         _[] = rhs._[];
         return this;
     }
@@ -39,7 +39,7 @@ struct SMat44 {
         return _[i*4+j];
     }
 
-    ref that opOpAssign(string O_)(ref const that rhs) if (O_ == "*") {
+    ref that opOpAssign(string O_)(in that rhs) if (O_ == "*") {
         that m = void;
         foreach (i; 0..4) {
             foreach (j; 0..4) {
@@ -53,7 +53,7 @@ struct SMat44 {
         return this;
     }
 
-    that opBinary(string O_)(that lhs, ref const that rhs) if (O_ == "*") {
+    that opBinary(string O_)(that lhs, in that rhs) if (O_ == "*") {
         lhs *= rhs;
         return lhs;
     }
