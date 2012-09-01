@@ -90,10 +90,10 @@ struct SVec(uint D_, T_) if (D_ >= 2 && D_ <= 4) {
         return _;
     }
 
-	ref T_ opIndex(size_t i) {
-		assert ( i < D_ );
-		return _[i];
-	}
+    ref T_ opIndex(size_t i) {
+        assert ( i < D_ );
+        return _[i];
+    }
 
     static if (__traits(isArithmetic, T_)) {
         float norm() const @property {

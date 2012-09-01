@@ -28,11 +28,11 @@ struct SMat44 {
         }
     }
 
-	ref float opIndex(size_t i, size_t j) {
-		assert ( i < 4 );
-		assert ( j < 4 );
-		return _[i*4+j];
-	}
+    ref float opIndex(size_t i, size_t j) {
+        assert ( i < 4 );
+        assert ( j < 4 );
+        return _[i*4+j];
+    }
 }
 
 /* matrix generators */
