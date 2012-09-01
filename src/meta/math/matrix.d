@@ -53,12 +53,13 @@ struct SMat44 {
         return this;
     }
 
-    that opBinary(string O_)(that lhs, in that rhs) if (O_ == "*") {
+    
+}
+
+SMat44 opBinary(string O_)(SMat44 lhs, in SMat44 rhs) if (O_ == "*") {
         lhs *= rhs;
         return lhs;
     }
-}
-
 /* matrix generators */
 SMat44 make_perspective(float fovy, float ratio, float znear, float zfar) in {
     assert ( fovy > 0.0f );
