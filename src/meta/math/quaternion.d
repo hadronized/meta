@@ -74,7 +74,6 @@ struct SQuat {
 
         foreach (i; 0..3) {
             r[i,3] = r[3,i] = 0.0f;
-            r[15] = 1.0f;
         }
 
         r[0,0] = 1.0f - 2*_axis.y*_axis.y - 2*_axis.z*_axis.z;
@@ -87,7 +86,8 @@ struct SQuat {
 
         r[2,0] = 2*_axis.x*_axis.z - 2*_phi*_axis.y;
         r[2,1] = 2*_axis.y*_axis.z + 2*_phi*_axis.x;
-        r[2,20] = 1.0f - 2*_axis.x*_axis.x - 2*_axis.y*_axis.y;
+        r[2,2] = 1.0f - 2*_axis.x*_axis.x - 2*_axis.y*_axis.y;
+        r[3,3] = 1.0f;
 
         return r;
     }
