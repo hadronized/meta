@@ -2,7 +2,7 @@ module meta.math.matrix;
 
 /* imports */
 private {
-    import std.math;
+    import std.math : tan;
 }
 public {
 }
@@ -28,6 +28,11 @@ struct SMat44 {
         }
     }
 
+    ref that opAssign(ref const that rhs) {
+        _[] = rhs._[];
+        return this;
+    }
+
     ref float opIndex(size_t i, size_t j) {
         assert ( i < 4 );
         assert ( j < 4 );
@@ -44,7 +49,13 @@ struct SMat44 {
             }
         }
 
-        return m;
+        this = m;
+        return this;
+    }
+
+    that opBinary(string O_)(that lhs, ref const that rhs) if (O_ == "*") {
+        lhs *= rhs;
+        return lhs;
     }
 }
 
