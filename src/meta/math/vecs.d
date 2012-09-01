@@ -26,9 +26,6 @@ struct SVec(uint D_, T_) if (D_ >= 2 && D_ <= 4) {
     /* components */
     private T_[D_] _;
 
-    /* make SVec usable such as array */
-    alias _ this;
-
     mixin MTAddCompProperties!("x", 0u);
     mixin MTAddCompProperties!("r", 0u);
     mixin MTAddCompProperties!("y", 1u);
@@ -93,6 +90,11 @@ struct SVec(uint D_, T_) if (D_ >= 2 && D_ <= 4) {
         return _;
     }
 
+	ref T_ opIndex(size_t i) {
+		assert ( i < D_ );
+		return _[i];
+	}
+
     static if (__traits(isArithmetic, T_)) {
         float norm() const @property {
             return sqrt(reduce!("a + b*b")(0.0f, _));
@@ -140,7 +142,7 @@ struct SVec(uint D_, T_) if (D_ >= 2 && D_ <= 4) {
             auto opCast(SMat44)() {
                 SMat44 r;
                 foreach (i; 0..D_)
-                    r[i][3] = _[i];
+                    r[i,3] = _[i];
                 return r;
             }
         }

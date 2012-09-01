@@ -72,22 +72,22 @@ struct SQuat {
     auto opCast(SMat44)() {
         SMat44 r = void;
 
-        for (auto i = 0; i < 3; ++i) {
-            r[i][3] = r[3][i] = 0.0f;
+        foreach (i; 0..3) {
+            r[i,3] = r[3,i] = 0.0f;
             r[15] = 1.0f;
         }
 
-        r[0][0] = 1.0f - 2*_axis.y*_axis.y - 2*_axis.z*_axis.z;
-        r[0][1] = 2*_axis.x*_axis.y - 2*_phi*_axis.z;
-        r[0][2] = 2*_axis.x*_axis.z + 2*_phi*_axis.y;
+        r[0,0] = 1.0f - 2*_axis.y*_axis.y - 2*_axis.z*_axis.z;
+        r[0,1] = 2*_axis.x*_axis.y - 2*_phi*_axis.z;
+        r[0,2] = 2*_axis.x*_axis.z + 2*_phi*_axis.y;
 
-        r[1][0] = 2*_axis.x*_axis.y + 2*_phi*_axis.z;
-        r[1][1] = 1.0f - 2*_axis.x*_axis.x - 2*_axis.z*_axis.z;
-        r[1][2] = 2*_axis.y*_axis.z - 2*_phi*_axis.x;
+        r[1,0] = 2*_axis.x*_axis.y + 2*_phi*_axis.z;
+        r[1,1] = 1.0f - 2*_axis.x*_axis.x - 2*_axis.z*_axis.z;
+        r[1,2] = 2*_axis.y*_axis.z - 2*_phi*_axis.x;
 
-        r[2][0] = 2*_axis.x*_axis.z - 2*_phi*_axis.y;
-        r[2][1] = 2*_axis.y*_axis.z + 2*_phi*_axis.x;
-        r[2][20] = 1.0f - 2*_axis.x*_axis.x - 2*_axis.y*_axis.y;
+        r[2,0] = 2*_axis.x*_axis.z - 2*_phi*_axis.y;
+        r[2,1] = 2*_axis.y*_axis.z + 2*_phi*_axis.x;
+        r[2,20] = 1.0f - 2*_axis.x*_axis.x - 2*_axis.y*_axis.y;
 
         return r;
     }
