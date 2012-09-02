@@ -124,7 +124,7 @@ struct STextureBinder {
 
     private ETextureTarget _target;
 
-    this(CTexture t, ETextureTarget target) {
+    this(const CTexture t, ETextureTarget target) {
         bind(t, target);
     }
 
@@ -132,7 +132,7 @@ struct STextureBinder {
         glBindTexture(_target, 0);
     }
 
-    private void bind(CTexture t, ETextureTarget target) in {
+    private void bind(const CTexture t, ETextureTarget target) in {
         assert ( t !is null );
     } body {
         glBindTexture(target, t.id);
