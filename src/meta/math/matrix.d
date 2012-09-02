@@ -55,15 +55,16 @@ struct SMat44 {
         return this;
     }
     
-    ref float opIndex(size_t i, size_t j) {
+    ref inout(float) opIndex(int i, int j) inout {
         assert ( i < 4 );
         assert ( j < 4 );
         return _[i*4+j];
     }
 
-    that opBinary(string O_)(that lhs, in that rhs) if (O_ == "*") {
-        lhs *= rhs;
-        return lhs;
+    that opBinary(string O_)(in that rhs) if (O_ == "*") {
+        that l = this;
+        l *= rhs;
+        return l;
     }
 }
 
@@ -106,4 +107,6 @@ unittest {
             0.0f, 0.0f, 0.0f, 1.0f
     ] );
 
+    /* matrix inner product */
+    assert ( (m * m2)  == m2 );
 }
